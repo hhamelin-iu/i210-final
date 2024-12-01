@@ -1,11 +1,11 @@
 <?php
 //Authors: Ryan Elliott, Haven Hamelin, Josie Juarez
 
-$page_title = "Adopt an Animal";
+$page_title = "Browse";
 include ('includes/header.php');?>
 
 </body>
 
-<h1>Hello (Animal) World!</h1>
+<h1>Browsing</h1>
 
 </html>
