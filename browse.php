@@ -1,11 +1,11 @@
 <?php
-//Authors: Ryan Elliott, Haven Hamelin, Josie Juarez
-
-$page_title = "Browse";
+$page_title = "Browsing";
 include ('includes/header.php');?>
+    <link rel="stylesheet" href="www/css/index.css">
+</head>
+    <?php include ('includes/navbar.php'); ?>
+
+    <h1>Browsing</h1>
 
 </body>
-
-<h1>Browsing</h1>
-
 </html>

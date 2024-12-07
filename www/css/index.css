@@ -1,0 +1,16 @@
+body {
+    background-image: url('../img/hero.jpg');
+    background-size: cover;
+}
+
+.hero-text {
+    position: fixed;
+    bottom: 45px;
+    right: 76px;
+    font-size: 30px;
+    font-family: sans-seif;
+    font-weight: bolder;
+    background: white;
+    border-radius: 5px;
+    padding: 5px;
+}
