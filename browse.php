@@ -3,11 +3,17 @@ $page_title = "Browsing";
 include ('includes/header.php');?>
     <link rel="stylesheet" href="www/css/browse.css">
 </head>
-    <?php include ('includes/navbar.php'); ?>
-</head>
-<body>
+<?php include ('includes/navbar.php'); ?>
     <h1>Up For Adoption</h1>
     <?php
+        include ('includes/config.php');
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $database);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
         // Query to fetch all entries from 'pets' table
         $sql = "SELECT * FROM pets";
         $result = $conn->query($sql);
@@ -17,6 +23,7 @@ include ('includes/header.php');?>
             echo "<div class='animal-grid'> ";
             while ($row = $result->fetch_assoc()) {
                     echo "<div class='animal-card'>";
+                        echo '<a href="animal_details.php?id=' . $row['id'] . '">';
                         echo "<img src='www/img/animals/" . $row['photo'] . "'>";
                         echo "<h2>" . $row['name'] . "</h2>";
                     echo "</div>";
