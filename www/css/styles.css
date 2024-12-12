@@ -7,25 +7,41 @@ html, body {
     margin: 0;
 }
 
-.navbar {
-    width: calc( 100% - ( var(--border-width) *2 ) );
-    height:var(--navbar-height);
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
-    background: rgb(255,255,255);
-    background: linear-gradient(178deg, rgba(255,255,255,1) 42%, rgba(237,237,237,1) 100%); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - var(--border-width) );
+    height: var(--navbar-height);
+    margin: 0;
+    background: linear-gradient(178deg, rgba(255, 255, 255, 1) 42%, rgba(237, 237, 237, 1) 100%);
     border: solid var(--border-width) lightgray;
     border-top-style: none;
     border-radius: 0 0 10px 10px;
 }
 
 .navbar ul {
+    display: flex;
     list-style-type: none;
-    margin: 0 20px;
+    margin: 0;
     padding: 0;
     line-height: var(--navbar-height);
+    margin-left: 20px;
 }
 
 .navbar ul li {
     display: inline;
+    margin-right: 20px;
+}
+
+.navbar .sign-in {
     margin-right: 20px;
 }

@@ -1,6 +1,7 @@
 <?php
 $page_title = "Browsing";
 include ('includes/header.php');?>
+    <link rel="stylesheet" href="www/css/browse-details.css">
     <link rel="stylesheet" href="www/css/browse.css">
 </head>
 <?php include ('includes/navbar.php'); ?>
@@ -18,9 +19,9 @@ include ('includes/header.php');?>
         $sql = "SELECT * FROM pets";
         $result = $conn->query($sql);
 
+        echo "<div class='animal-grid'> ";
         if ($result->num_rows > 0) {
             // Loop through each entry
-            echo "<div class='animal-grid'> ";
             while ($row = $result->fetch_assoc()) {
                     echo "<div class='animal-card'>";
                         echo '<a href="animal_details.php?id=' . $row['id'] . '">';
@@ -28,8 +29,13 @@ include ('includes/header.php');?>
                         echo "<h2>" . $row['name'] . "</h2>";
                     echo "</div>";
             }
-            echo "</div>";
         }
+                echo "<div class='add-new-card'>";
+                    echo '<a href="add_new.php">';
+                    echo "<div class='plus'>+</div>";
+                    echo "<h2> Add New </h2>";
+                echo "</div>";
+        echo "</div>";
     ?>
 </body>
 </html>
