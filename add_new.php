@@ -1,0 +1,137 @@
+<?php
+$page_title = "Add New Entry";
+include ('includes/header.php');?>
+    <script>
+        async function fetchBreeds(animalId) {
+            const response = await fetch(`get_breeds.php?animal_id=${animalId}`);
+            const breeds = await response.json();
+            const breedSelect = document.getElementById('breed');
+
+            // Clear existing options
+            breedSelect.innerHTML = '<option value="">Select a breed</option>';
+
+            // Populate new options
+            breeds.forEach(breed => {
+                const option = document.createElement('option');
+                option.value = breed.id;
+                option.textContent = breed.breed_name;
+                breedSelect.appendChild(option);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const animalSelect = document.getElementById('animal');
+            animalSelect.addEventListener('change', (e) => {
+                const animalId = e.target.value;
+                if (animalId) {
+                    fetchBreeds(animalId);
+                } else {
+                    const breedSelect = document.getElementById('breed');
+                    breedSelect.innerHTML = '<option value="">Select a breed</option>';
+                }
+            });
+        });
+    </script>
+</head>
+
+<?php
+include('includes/config.php');
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch animal types
+$animal_types = [];
+$animal_types_query = "SELECT id, type_name FROM animal_types";
+
+if ($result = $conn->query($animal_types_query)) {
+    while ($row = $result->fetch_assoc()) {
+        $animal_types[] = $row;
+    }
+    $result->free();
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'] ?? '';
+    $animal = $_POST['animal'] ?? '';
+    $breed = $_POST['breed'] ?? '';
+    $age = $_POST['age'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $behavior = $_POST['behavior'] ?? '';
+
+    // Handle file upload
+    $upload_dir = 'www/img/animals/';
+    $photo = '';
+
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $tmp_name = $_FILES['photo']['tmp_name'];
+        $original_name = basename($_FILES['photo']['name']);
+        $target_path = $upload_dir . time() . '_' . $original_name;
+
+        if (move_uploaded_file($tmp_name, $target_path)) {
+            $photo = $target_path;
+        } else {
+            echo "Error uploading file.";
+        }
+    }
+
+    // Prepare and bind
+    $stmt = $conn->prepare("INSERT INTO pets (name, animal, breed, age, description, behavior, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("siissss", $name, $animal, $breed, $age, $description, $behavior, $photo);
+
+    if ($stmt->execute()) {
+        echo "New entry added successfully.";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
+
+<body>
+    <a href="browse.php" class="special-link">&larr; Back to List</a>
+    <h1>Add a New Pet Entry</h1>
+    <form action="" method="POST" enctype="multipart/form-data">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="animal">Animal Type:</label><br>
+        <select id="animal" name="animal" required>
+            <option value="">Select an animal type</option>
+            <?php foreach ($animal_types as $type): ?>
+                <option value="<?php echo htmlspecialchars($type['id']); ?>">
+                    <?php echo htmlspecialchars($type['type_name']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br><br>
+
+        <label for="breed">Breed:</label><br>
+        <select id="breed" name="breed" required>
+            <option value="">Select a breed</option>
+        </select><br><br>
+
+        <label for="age">Age:</label><br>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="behavior">Behavior:</label><br>
+        <input type="text" id="behavior" name="behavior" required><br><br>
+
+        <label for="photo">Photo:</label><br>
+        <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
+
+        <button type="submit">Add Entry</button>
+    </form>
+</body>
+</html>

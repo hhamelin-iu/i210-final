@@ -24,16 +24,18 @@ include ('includes/header.php');?>
             // Loop through each entry
             while ($row = $result->fetch_assoc()) {
                     echo "<div class='animal-card'>";
+                        echo '<div class="trash-button" onclick="window.open(\'delete.php?id=' . $row['id'] . '\', \'mywindow\');">';
+                            echo '<div class="trash-icon"></div>';
+                        echo '</div>';
                         echo '<a href="animal_details.php?id=' . $row['id'] . '">';
-                        echo "<img src='www/img/animals/" . $row['photo'] . "'>";
+                        echo "<img src='" . $row['photo'] . "'>";
                         echo "<h2>" . $row['name'] . "</h2>";
+                        echo "</a>";
                     echo "</div>";
             }
         }
-                echo "<div class='add-new-card'>";
-                    echo '<a href="add_new.php">';
-                    echo "<div class='plus'>+</div>";
-                    echo "<h2> Add New </h2>";
+                echo "<div class='add-new'>";
+                    echo '<a class="plus" href="add_new.php">+</a>';
                 echo "</div>";
         echo "</div>";
     ?>

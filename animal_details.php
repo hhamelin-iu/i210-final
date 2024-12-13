@@ -47,7 +47,7 @@ include ('includes/header.php'); ?>
 <?php include ('includes/navbar.php'); ?>
     <div class="animal-details">
         <h1><?php echo htmlspecialchars($animal['name']); ?></h1>
-        <img src="<?= 'www/img/animals/' . htmlspecialchars($animal['photo']); ?>" alt="<?php echo htmlspecialchars($animal['name']); ?>">
+        <img src="<?= htmlspecialchars($animal['photo']); ?>" alt="<?php echo htmlspecialchars($animal['name']); ?>">
         <div style="display:inline-block">
             <p><strong>Animal:</strong> <?php echo htmlspecialchars($animal['type_name']); ?></p>
             <p><strong>Breed:</strong> <?php echo htmlspecialchars($animal['breed_name']); ?></p>

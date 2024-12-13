@@ -45,3 +45,13 @@ body {
 .navbar .sign-in {
     margin-right: 20px;
 }
+
+.special-link {
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+}
+.special-link:hover {
+    text-decoration: underline;
+}

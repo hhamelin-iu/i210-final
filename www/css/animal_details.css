@@ -19,12 +19,3 @@
 .animal-details p {
     margin: 10px 0;
 }
-.special-link {
-    margin-top: 20px;
-    text-decoration: none;
-    color: #007BFF;
-    font-weight: bold;
-}
-.special-link:hover {
-    text-decoration: underline;
-}
