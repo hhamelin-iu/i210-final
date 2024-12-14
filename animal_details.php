@@ -26,35 +26,35 @@ if (isset($_GET['id'])) {
 
     // Check if the animal exists
     if ($result->num_rows > 0) {
-        $animal = $result->fetch_assoc();
+        $pet = $result->fetch_assoc();
     } else {
-        die("Animal not found.");
+        die("Pet not found.");
     }
     $stmt->close();
 } else {
-    die("No animal selected.");
+    die("No pet selected.");
 }
 
 $conn->close();
 ?>
 
 <?php
-$page_title = htmlspecialchars($animal['name']) . " - Details";
+$page_title = htmlspecialchars($pet['name']) . " - Details";
 include ('includes/header.php'); ?>
     <link rel="stylesheet" href="www/css/browse-details.css">
     <link rel="stylesheet" href="www/css/animal_details.css">
 </head>
 <?php include ('includes/navbar.php'); ?>
     <div class="animal-details">
-        <h1><?php echo htmlspecialchars($animal['name']); ?></h1>
-        <img src="<?= htmlspecialchars($animal['photo']); ?>" alt="<?php echo htmlspecialchars($animal['name']); ?>">
+        <h1><?php echo htmlspecialchars($pet['name']); ?></h1>
+        <img src="<?= htmlspecialchars($pet['photo']); ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
         <div style="display:inline-block">
-            <p><strong>Animal:</strong> <?php echo htmlspecialchars($animal['type_name']); ?></p>
-            <p><strong>Breed:</strong> <?php echo htmlspecialchars($animal['breed_name']); ?></p>
-            <p><strong>Age:</strong> <?php echo htmlspecialchars($animal['age']); ?> years</p>
+            <p><strong>Animal:</strong> <?php echo htmlspecialchars($pet['type_name']); ?></p>
+            <p><strong>Breed:</strong> <?php echo htmlspecialchars($pet['breed_name']); ?></p>
+            <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?> years</p>
         </div>
         <a class="special-link" style="display:inline-block; margin-left: 125px;" href="reserve.php">Reserve</a>
-        <p><strong>Description:</strong> <?php echo htmlspecialchars($animal['description']); ?></p>
+        <p><strong>Description:</strong> <?php echo htmlspecialchars($pet['description']); ?></p>
         <a href="browse.php" class="special-link">&larr; Back to List</a>
     </div>
 </body>

@@ -1,0 +1,52 @@
+.photo-section {
+    margin-top: 20px;
+}
+
+.current-photo-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.photo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.current-photo {
+    max-width: 150px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.update-photo {
+    display: flex;
+    flex-direction: column;
+}
+
+.update-photo label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.update-photo input[type="file"] {
+    font-size: 14px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-container button {
+    flex: 1; /* Equal size for both buttons */
+    padding: 10px;
+    font-size: 16px;
+}
+
+.button-container button[type="submit"]:last-child {
+    background-color: red;
+    color: white;
+}

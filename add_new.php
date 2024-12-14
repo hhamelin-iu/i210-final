@@ -1,37 +1,7 @@
 <?php
 $page_title = "Add New Entry";
 include ('includes/header.php');?>
-    <script>
-        async function fetchBreeds(animalId) {
-            const response = await fetch(`get_breeds.php?animal_id=${animalId}`);
-            const breeds = await response.json();
-            const breedSelect = document.getElementById('breed');
-
-            // Clear existing options
-            breedSelect.innerHTML = '<option value="">Select a breed</option>';
-
-            // Populate new options
-            breeds.forEach(breed => {
-                const option = document.createElement('option');
-                option.value = breed.id;
-                option.textContent = breed.breed_name;
-                breedSelect.appendChild(option);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const animalSelect = document.getElementById('animal');
-            animalSelect.addEventListener('change', (e) => {
-                const animalId = e.target.value;
-                if (animalId) {
-                    fetchBreeds(animalId);
-                } else {
-                    const breedSelect = document.getElementById('breed');
-                    breedSelect.innerHTML = '<option value="">Select a breed</option>';
-                }
-            });
-        });
-    </script>
+    <script src="js/breeds.js"></script>
 </head>
 
 <?php

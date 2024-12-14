@@ -24,9 +24,9 @@ include ('includes/header.php');?>
             // Loop through each entry
             while ($row = $result->fetch_assoc()) {
                     echo "<div class='animal-card'>";
-                        echo '<div class="trash-button" onclick="window.open(\'delete.php?id=' . $row['id'] . '\', \'mywindow\');">';
-                            echo '<div class="trash-icon"></div>';
-                        echo '</div>';
+                        echo '<a class="edit-button" href="edit.php?id=' . $row['id'] . '" target="_blank">';
+                            echo '<div class="edit-icon"></div>';
+                        echo '</a>';
                         echo '<a href="animal_details.php?id=' . $row['id'] . '">';
                         echo "<img src='" . $row['photo'] . "'>";
                         echo "<h2>" . $row['name'] . "</h2>";
