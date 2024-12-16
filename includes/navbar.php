@@ -19,7 +19,6 @@ if (isset($_SESSION['login']) AND isset($_SESSION['name']) AND
     <ul>
         <li><a href=".">Home</a></li>
         <li><a href="browse.php">Browse</a></li>
-        <li><a href="#">Contact</a></li>
     </ul>
     <div>
         <?= ($role == 1 ? '<span style="color:red">ADMIN MODE</span>' : '') ?>

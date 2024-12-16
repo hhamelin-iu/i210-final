@@ -39,17 +39,19 @@ include ('includes/header.php'); ?>
     <link rel="stylesheet" href="www/css/animal_details.css">
 </head>
 <?php include ('includes/navbar.php'); ?>
-    <div class="animal-details">
-        <h1><?php echo htmlspecialchars($pet['name']); ?></h1>
-        <img src="<?= htmlspecialchars($pet['photo']); ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
-        <div style="display:inline-block">
-            <p><strong>Animal:</strong> <?php echo htmlspecialchars($pet['type_name']); ?></p>
-            <p><strong>Breed:</strong> <?php echo htmlspecialchars($pet['breed_name']); ?></p>
-            <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?> years</p>
+    <div class="flex-wrapper">
+        <div class="animal-details">
+            <h1><?php echo htmlspecialchars($pet['name']); ?></h1>
+            <img src="<?= htmlspecialchars($pet['photo']); ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
+            <div style="display:inline-block">
+                <p><strong>Animal:</strong> <?php echo htmlspecialchars($pet['type_name']); ?></p>
+                <p><strong>Breed:</strong> <?php echo htmlspecialchars($pet['breed_name']); ?></p>
+                <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?> years</p>
+            </div>
+            <a class="special-link" style="display:inline-block; margin-left: 125px;" href="add_to_cart.php?id=<?= $_GET['id'] ?>">Reserve</a>
+            <p><strong>Description:</strong> <?php echo htmlspecialchars($pet['description']); ?></p>
+            <a href="browse.php" class="special-link">&larr; Back to List</a>
         </div>
-        <a class="special-link" style="display:inline-block; margin-left: 125px;" href="add_to_cart.php?id=<?= $_GET['id'] ?>">Reserve</a>
-        <p><strong>Description:</strong> <?php echo htmlspecialchars($pet['description']); ?></p>
-        <a href="browse.php" class="special-link">&larr; Back to List</a>
     </div>
 </body>
 </html>

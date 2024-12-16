@@ -1,6 +1,19 @@
 <?php
+$page_title = "Add to Cart";
+include ('includes/header.php');?>
+</head>
+
+<?php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+}
+
+if ($login_status == 0) {
+    include ('includes/navbar.php');
+    echo "<h2>Error: Cannot Reserve Pet</h2>";
+    echo "<p>Please login to reserve a pet.</p>";
+    echo "</body>";
+    exit();
 }
 
 if (isset($_SESSION['cart'])) {
