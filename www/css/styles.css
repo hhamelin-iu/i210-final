@@ -61,3 +61,18 @@ body {
 .petlist {
     width: 80%;
 }
+
+.contact-header {
+    background-color: rgba(255,255,255,.85);
+    border-radius: 12px;
+}
+
+.contact-wrapper {
+    background-color: rgba(255,255,255,.85);
+    border-radius: 12px;
+}
+
+.contact-wrapper form {
+    margin: 0 auto;
+    width: min-content;
+}
