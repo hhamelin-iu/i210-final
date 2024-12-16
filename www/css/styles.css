@@ -44,6 +44,24 @@ body {
     margin-right: 20px;
 }
 
+.home-button {
+    display: block;
+    border: 5px solid #007BFF;
+    border-radius: 12px;
+    background: rgba(237, 237, 237, 0.85);
+    margin-top: 11px !important;
+}
+
+.navbar ul li .home-button .cat-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #007BFF;
+    mask: url('../img/cat.svg');
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
 .navbar .sign-in {
     margin-right: 20px;
 }

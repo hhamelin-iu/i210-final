@@ -17,7 +17,7 @@ if (isset($_SESSION['login']) AND isset($_SESSION['name']) AND
 
 <div class="navbar">
     <ul>
-        <li><a href=".">Home</a></li>
+        <li><a class="home-button" href="."><div class="cat-icon"></div></a></li>
         <li><a href="browse.php">Browse</a></li>
         <li><a href="contact.php">Contact</a></li>
     </ul>
