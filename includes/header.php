@@ -1,6 +1,6 @@
 <?php
     //Authors: Ryan Elliott, Haven Hamelin, Josie Juarez
-    // Database credentials
+
 ?>
 
 <!DOCTYPE html>

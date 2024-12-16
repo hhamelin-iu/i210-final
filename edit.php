@@ -2,19 +2,17 @@
 $page_title = "Edit Entry";
 include ('includes/header.php');?>
     <link rel="stylesheet" href="www/css/edit.css">
-    <script src="js/breeds.js"></script>
+    <script src="www/js/updateBreeds.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBreedUpdater('animal', 'breed');
+        });
+    </script>
 </head>
 
 <?php
 include('includes/config.php');
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include('includes/connect.php');
 
 // Fetch animal types
 $animal_types = [];
@@ -116,7 +114,7 @@ $conn->close();
         </select><br><br>
 
         <label for="breed">Breed:</label><br>
-        <select id="breed" name="breed" required data-current-breed="<?php echo htmlspecialchars($pet['breed']); ?>">
+        <select id="breed" name="breed" data-selected-breed="<?php echo htmlspecialchars($pet['breed'] ?? ''); ?>" required>
             <option value="">Select a breed</option>
         </select><br><br>
 

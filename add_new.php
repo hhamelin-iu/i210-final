@@ -1,19 +1,17 @@
 <?php
 $page_title = "Add New Entry";
 include ('includes/header.php');?>
-    <script src="js/breeds.js"></script>
+    <script src="www/js/updateBreeds.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBreedUpdater('animal', 'breed');
+        });
+    </script>
 </head>
 
 <?php
 include('includes/config.php');
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include('includes/connect.php');
 
 // Fetch animal types
 $animal_types = [];

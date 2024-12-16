@@ -26,6 +26,7 @@ body {
     border: solid var(--border-width) lightgray;
     border-top-style: none;
     border-radius: 0 0 10px 10px;
+    font-size: 20px;
 }
 
 .navbar ul {
@@ -46,7 +47,7 @@ body {
     margin-right: 20px;
 }
 
-.special-link {
+.special-link, .navbar ul li a, .sign-in {
     margin-top: 20px;
     text-decoration: none;
     color: #007BFF;
@@ -54,4 +55,8 @@ body {
 }
 .special-link:hover {
     text-decoration: underline;
+}
+
+.petlist {
+    width: 80%;
 }

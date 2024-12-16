@@ -1,12 +1,6 @@
 <?php
 include ('includes/config.php');
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include('includes/connect.php');
 
 // Check if 'id' is in the URL
 if (isset($_GET['id'])) {
@@ -53,7 +47,7 @@ include ('includes/header.php'); ?>
             <p><strong>Breed:</strong> <?php echo htmlspecialchars($pet['breed_name']); ?></p>
             <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?> years</p>
         </div>
-        <a class="special-link" style="display:inline-block; margin-left: 125px;" href="reserve.php">Reserve</a>
+        <a class="special-link" style="display:inline-block; margin-left: 125px;" href="add_to_cart.php?id=<?= $_GET['id'] ?>">Reserve</a>
         <p><strong>Description:</strong> <?php echo htmlspecialchars($pet['description']); ?></p>
         <a href="browse.php" class="special-link">&larr; Back to List</a>
     </div>
