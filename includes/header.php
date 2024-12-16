@@ -1,5 +1,5 @@
 <?php
-    //Authors: Ryan Elliott, Haven Hamelin, Josie Juarez
+    //Authors: Haven Hamelin
 
 ?>
 

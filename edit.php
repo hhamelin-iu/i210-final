@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("i", $id);
         if ($stmt->execute()) {
             echo "Pet entry deleted successfully.";
-            header("Location: browse.php"); // Redirect to a list of pets after deletion
+            header("Location: browse.php"); // Redirect to browse.php
             exit();
         } else {
             echo "Error deleting pet: " . $stmt->error;
