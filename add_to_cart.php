@@ -8,6 +8,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$login_status = isset($_SESSION['login_status']) ? $_SESSION['login_status'] : 0;
+
 if ($login_status == 0) {
     include ('includes/navbar.php');
     echo "<h2>Error: Cannot Reserve Pet</h2>";
