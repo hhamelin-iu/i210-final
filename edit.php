@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             echo "Pet entry updated successfully.";
+            header("Location: animal_details.php?id=$id");
         } else {
             echo "Error: " . $stmt->error;
         }
