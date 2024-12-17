@@ -1,42 +1,53 @@
 <?php
-//include code from database.php
 require_once('includes/config.php');
 include('includes/connect.php');
 
-//start session if it has not already started
+// Start session if it hasn't already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-//create variable login status.
+// Initialize login status
 $_SESSION['login_status'] = 2;
-$username = $passcode = "";
+$username = $password = "";
 
-// Retrieve username and password from POST request
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $conn->real_escape_string(trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING)));
-    $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
+    $password = trim($_POST['password']);
 } else {
     die("Username or password not provided.");
 }
 
-//validate user name and password against a record in the users table in the database. If they are valid, create session variables.
-$sql = "SELECT * FROM users WHERE username='$username'";
-$query = $conn->query($sql);
+// Query the database for the user
+$sql = "SELECT * FROM users WHERE username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($query->num_rows) {
-    //It is a valid user. Need to store the user in session variables.
-    $row = $query->fetch_assoc();
-    $_SESSION['login'] = $username;
-    $_SESSION['role'] = $row['role'];
-    $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];
-    $_SESSION['login_status'] = 1;
+// Validate the username and password
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    
+    // Verify the password
+    if ($password == $row['password']) {
+        // Password matches
+        $_SESSION['login'] = $username;
+        $_SESSION['role'] = $row['role'];
+        $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];
+        $_SESSION['login_status'] = 1;
+    } else {
+        // Incorrect password
+        $_SESSION['login_status'] = 2;
+    }
+} else {
+    // Username does not exist
+    $_SESSION['login_status'] = 2;
 }
 
-
-
-//close the connection
+// Close the connection
+$stmt->close();
 $conn->close();
-
 //redirect to the loginform.php page
 header("Location: loginform.php");
+?>

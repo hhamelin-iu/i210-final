@@ -49,6 +49,7 @@ include ('includes/header.php'); ?>
                 <p><strong>Age:</strong> <?php echo htmlspecialchars($pet['age']); ?> years</p>
             </div>
             <a class="special-link" style="display:inline-block; margin-left: 125px;" href="add_to_cart.php?id=<?= $_GET['id'] ?>">Reserve</a>
+            <p><strong>Behavior:</strong> <?php echo htmlspecialchars($pet['behavior']); ?></p>
             <p><strong>Description:</strong> <?php echo htmlspecialchars($pet['description']); ?></p>
             <a href="browse.php" class="special-link">&larr; Back to List</a>
         </div>

@@ -91,6 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $stmt->close();
+        // Redirect to the relevant animal details page
+        header("Location: animal_details.php?id=$id");
     }
 }
 
@@ -137,13 +139,10 @@ $conn->close();
                 </div>
             </div>
         </div>
-
         <div class="button-container">
-            <button type="submit">Update Entry</button>
-            <form action="" method="POST" onsubmit="return confirm('Are you sure you want to delete this pet?');" style="display: inline;">
-                <input type="hidden" name="delete" value="1">
-                <button type="submit" style="background-color: red; color: white;">Delete Entry</button>
-            </form>
+            <button type="submit" name="update" value="1">Update Entry</button>
+            <button type="submit" name="delete" value="1" style="background-color: red; color: white;" 
+                onclick="return confirm('Are you sure you want to delete this pet?');">Delete Entry</button>
         </div>
     </form>
 </body>

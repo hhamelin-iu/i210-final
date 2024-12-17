@@ -39,10 +39,11 @@ if (!is_numeric($id)) {
     die();
 }
 
-if (array_key_exists($id, $cart)) {
+// Check for the pet ID in the cart
+if (isset($cart[$id])) {
     //no longer keeping track of count, so this is commented out for now
-    #$cart[$id] = $cart[$id] + 1;
-    } else {
+    // $cart[$id] += 1;
+} else {
     $cart[$id] = 1;
 }
 

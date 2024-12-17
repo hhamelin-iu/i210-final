@@ -45,7 +45,7 @@ include ('includes/header.php'); ?>
             while ($row = $result->fetch_assoc()) {
                 echo "<div class='animal-card'>";
                     if ($role == 1) {
-                        echo '<a class="edit-button" href="edit.php?id=' . $row['id'] . '" target="_blank">';
+                        echo '<a class="edit-button" href="edit.php?id=' . $row['id'] . '">';
                             echo '<div class="edit-icon"></div>';
                         echo '</a>';
                     }
