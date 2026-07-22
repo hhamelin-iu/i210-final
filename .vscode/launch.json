@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "▶ Run PHP Server (localhost:8000)",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "php",
+            "runtimeArgs": [
+                "-S",
+                "localhost:8000"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}

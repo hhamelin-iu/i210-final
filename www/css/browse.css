@@ -1,86 +1,186 @@
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Goofy Space Catalog CSS with Spaceship Corridor Background */
+
+body.browse-page, .browse-container {
+    position: relative;
 }
 
-h1 {
-    margin: 20px 0;
+.browse-hero-header {
+    padding: 30px 24px;
+    border-radius: var(--radius-card);
+    background: linear-gradient(135deg, rgba(10, 5, 24, 0.85) 0%, rgba(23, 15, 48, 0.92) 100%),
+                url('../img/browse_background.jpg') no-repeat center / cover;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), var(--glow-cyan);
+    margin-bottom: 35px;
+    text-align: center;
 }
-.animal-grid {
+
+.search-container {
+    max-width: 720px;
+    margin: 20px auto 10px auto;
+}
+
+.search-form {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-    max-width: 1200px;
+    gap: 14px;
 }
+
+.search-form input[type="text"] {
+    flex: 1;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    padding: 14px 22px;
+    border-radius: 16px 8px 16px 8px;
+    background: rgba(10, 5, 24, 0.95);
+    border: 2px solid var(--border-color);
+    color: var(--text-main);
+    box-shadow: 0 0 15px rgba(176, 38, 255, 0.2);
+}
+
+.search-form input[type="text"]:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+}
+
+.animal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 32px;
+    margin-bottom: 50px;
+}
+
 .animal-card {
     position: relative;
-    width: 200px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--bg-surface);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border: 2px solid var(--border-color);
+    border-radius: 24px 10px 24px 10px;
     overflow: hidden;
-    background-color: ghostwhite;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
 }
 
-.animal-card .edit-button {
-    display: block;
-    --size: 30px;
-    --border-size: 4px;
-    position: absolute;
-    width: var(--size);
-    height: var(--size);
-    left: calc( 100% - var(--size) - ( 2 *var(--border-size)));
-    border-radius: 7px;
-    cursor: pointer;
-    border: var(--border-size) solid gray;
-    background-color: lightgray;
+.animal-card:hover {
+    transform: translateY(-8px) rotate(-1.5deg) scale(1.03);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
 }
 
-.edit-button .edit-icon {
-    position: relative;
-    top: -8px;
-    left: -8px;
-    width: 150%;
-    height: 150%;
-    background-color: black;
-    mask: url('../img/pencil.svg');
-    mask-size: 100%;
-    mask-repeat: no-repeat;
-    mask-position: center;
+.animal-card a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .animal-card img {
     width: 100%;
-    height: 150px;
+    height: 220px;
     object-fit: cover;
+    border-bottom: 2px solid var(--border-color);
+    transition: transform 0.4s ease;
 }
+
+.animal-card:hover img {
+    transform: scale(1.06);
+}
+
+.animal-card-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 .animal-card h2 {
-    font-size: 18px;
-    margin: 10px 0;
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin: 8px 0 6px 0;
+    color: var(--neon-cyan);
 }
 
-.add-new {
-    align-self: center;
-    width: 75px;
-    height: 75px;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+.animal-card-desc {
+    color: var(--text-muted);
+    font-size: 0.925rem;
+    line-height: 1.6;
+    margin-top: 4px;
+    flex: 1;
 }
 
-.plus {
-    display: block;
-    background: darkgrey;
-    width: 100%;
-    font-size: 100px;
-    font-weight: bold;
-    color: gainsboro;
-    line-height: 75px;
-    text-decoration: inherit;
+.animal-card .edit-button {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(10, 5, 24, 0.9);
+    backdrop-filter: blur(8px);
+    border: 2px solid var(--neon-pink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+}
+
+.animal-card .edit-button:hover {
+    background: var(--neon-pink);
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 0 20px var(--neon-pink);
+}
+
+.edit-button .edit-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    mask: url('../img/pencil.svg') no-repeat center / contain;
+    -webkit-mask: url('../img/pencil.svg') no-repeat center / contain;
+}
+
+.add-new-card {
+    border: 2px dashed var(--neon-green);
+    border-radius: 24px 10px 24px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+    background: rgba(57, 255, 20, 0.05);
+    transition: all 0.3s ease;
+}
+
+.add-new-card:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(0, 240, 255, 0.12);
+    transform: translateY(-6px) scale(1.02);
+}
+
+.plus-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--neon-green);
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.plus-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    color: #0a0518;
+    font-size: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glow-green);
 }

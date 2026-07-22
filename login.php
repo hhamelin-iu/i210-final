@@ -1,53 +1,47 @@
 <?php
 require_once('includes/config.php');
 include('includes/connect.php');
+include_once('includes/alert.php');
 
-// Start session if it hasn't already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Initialize login status
-$_SESSION['login_status'] = 2;
-$username = $password = "";
+$username = trim($_POST['username'] ?? '');
+$password = trim($_POST['password'] ?? '');
 
-if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $conn->real_escape_string(trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING)));
-    $password = trim($_POST['password']);
-} else {
-    die("Username or password not provided.");
+if (empty($username) || empty($password)) {
+    set_alert("Please enter both username and password.", "warning");
+    header("Location: loginform.php");
+    exit();
 }
 
-// Query the database for the user
-$sql = "SELECT * FROM users WHERE username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+if (isset($conn) && !$conn->connect_error) {
+    // Prepared Query
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-// Validate the username and password
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    
-    // Verify the password
-    if ($password == $row['password']) {
-        // Password matches
-        $_SESSION['login'] = $username;
-        $_SESSION['role'] = $row['role'];
-        $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];
-        $_SESSION['login_status'] = 1;
-    } else {
-        // Incorrect password
-        $_SESSION['login_status'] = 2;
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        
+        // Verify password
+        if ($password === $row['password']) {
+            $_SESSION['login'] = $username;
+            $_SESSION['role'] = (int)$row['role'];
+            $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];
+            $_SESSION['login_status'] = 1;
+
+            set_alert("Welcome back, " . $_SESSION['name'] . "!", "success");
+            header("Location: index.php");
+            exit();
+        }
     }
-} else {
-    // Username does not exist
-    $_SESSION['login_status'] = 2;
 }
 
-// Close the connection
-$stmt->close();
-$conn->close();
-//redirect to the loginform.php page
+$_SESSION['login_status'] = 2;
+set_alert("Invalid username or password. Please try again.", "error");
 header("Location: loginform.php");
-?>
+exit();

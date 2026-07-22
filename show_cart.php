@@ -1,84 +1,144 @@
 <?php
-
 require_once('includes/config.php');
 require_once('includes/connect.php');
+require_once('includes/alert.php');
 
-$page_title = "Reservations";
+$page_title = "My Pet Reservations";
 require_once('includes/header.php');
 ?>
+    <style>
+        .cart-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 14px;
+            margin: 20px 0;
+        }
+
+        .cart-row {
+            background: var(--bg-surface);
+            backdrop-filter: var(--glass-backdrop);
+            border: 2px solid var(--border-color);
+            transition: border-color 0.2s ease;
+        }
+
+        .cart-row td {
+            padding: 18px 22px;
+            vertical-align: middle;
+        }
+
+        .cart-row td:first-child {
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
+        }
+
+        .cart-row td:last-child {
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .cart-thumb {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--neon-purple);
+        }
+    </style>
 </head>
 
-<?php require_once('includes/navbar.php'); ?>
-<h2>My Reservations</h2>
-<?php
-if (!isset($_SESSION['cart']) || !$_SESSION['cart']) {
-    echo "You have no reservations.<br><br>";
-    exit();
-}
-
-// Proceed since the cart is not empty
-$cart = $_SESSION['cart'];
-$pet_ids = array_keys($cart); // Extract pet IDs from the cart
-
-if (empty($pet_ids)) {
-    echo "You have no reservations.<br><br>";
-    exit();
-}
-
-$sql = "SELECT pets.id, pets.name, pets.photo, animal_types.type_name, breeds.breed_name 
-        FROM pets
-        LEFT JOIN animal_types ON pets.animal = animal_types.id
-        LEFT JOIN breeds ON pets.breed = breeds.id
-        WHERE pets.id IN (" . implode(',', $pet_ids) . ")";
-
-// Execute query directly since IDs are known to be integers
-$result = $conn->query($sql);
-
-if (!$result || $result->num_rows === 0) {
-    echo "You have no reservations<br><br>";
-    exit();
-}
+<?php 
+require_once('includes/navbar.php');
+render_alert();
 ?>
-    <table class="petlist" style="border: 1px solid black; border-collapse: collapse;">
-        <thead>
-            <tr>
-                <th style="border: 1px solid black;">Photo</th>
-                <th style="border: 1px solid black;">Name</th>
-                <th style="border: 1px solid black;">Animal Type</th>
-                <th style="border: 1px solid black;">Breed</th>
-                <th style="border: 1px solid black;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            while ($row = $result->fetch_assoc()) {
-                $id = $row['id'];
-                $name = htmlspecialchars($row['name']);
-                $photo = htmlspecialchars($row['photo']);
-                $animal_type = htmlspecialchars($row['type_name']);
-                $breed = htmlspecialchars($row['breed_name']);
-                
-                echo "<tr>
-                        <td style='border: 1px solid black; text-align: center;'>
-                            <img src='$photo' alt='$name' style='max-width: 100px; max-height: 100px;'>
-                        </td>
-                        <td style='border: 1px solid black;'>$name</td>
-                        <td style='border: 1px solid black;'>$animal_type</td>
-                        <td style='border: 1px solid black;'>$breed</td>
-                        <td style='border: 1px solid black;'>
-                            <a class='special-link' href='remove_from_cart.php?id=$id' onclick='return confirm(\"Are you sure you want to remove this pet?\")'>Remove</a>
-                        </td>
-                    </tr>";
-            }
-            ?>
-        </tbody>
-    </table>
-    <br>
-    <div>
-        <a href="browse.php" class="special-link">&larr; Back to List</a>
-        <form action="checkout.php">
-            <button type="submit">Submit</button>
-        </form>
+
+<main class="container">
+    <div style="margin-top: 20px; margin-bottom: 30px;">
+        <span class="badge badge-primary">Reservation Center</span>
+        <h1 style="font-size: 2.5rem; margin-top: 8px; color: var(--neon-cyan);">My Pet Reservations</h1>
     </div>
-</body>
-</html>
+
+    <?php
+    $cart = $_SESSION['cart'] ?? [];
+    $pet_ids = array_filter(array_keys($cart), 'is_numeric');
+
+    if (empty($pet_ids)) {
+        ?>
+        <div class="empty-state">
+            <div class="empty-state-title">Your Cart is Empty</div>
+            <div class="empty-state-desc">You haven't added any pets to your reservation list yet. Browse our roster to find your match!</div>
+            <a href="browse.php" class="btn btn-primary">Browse Pets Now</a>
+        </div>
+        <?php
+    } else {
+        $id_list = implode(',', array_map('intval', $pet_ids));
+        $sql = "SELECT pets.id, pets.name, pets.photo, pets.age, animal_types.type_name, breeds.breed_name 
+                FROM pets
+                LEFT JOIN animal_types ON pets.animal = animal_types.id
+                LEFT JOIN breeds ON pets.breed = breeds.id
+                WHERE pets.id IN ($id_list)";
+        
+        $result = $conn->query($sql);
+
+        if ($result && $result->num_rows > 0) {
+            ?>
+            <div class="glass-card" style="padding: 26px;">
+                <table class="cart-table">
+                    <thead>
+                        <tr style="color: var(--neon-cyan); font-family: var(--font-heading); text-align: left; font-size: 1rem;">
+                            <th style="padding: 0 20px 10px 20px;">Companion Pet</th>
+                            <th>Age</th>
+                            <th>Classification</th>
+                            <th style="text-align: right; padding-right: 20px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr class="cart-row">
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 18px;">
+                                        <img src="<?= htmlspecialchars($row['photo']) ?>" alt="<?= htmlspecialchars($row['name']) ?>" class="cart-thumb">
+                                        <strong style="font-size: 1.2rem; color: var(--text-main); font-family: var(--font-heading);"><?= htmlspecialchars($row['name']) ?></strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="color: var(--text-muted); font-size: 0.95rem;"><?= htmlspecialchars($row['age']) ?> years old</span>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                        <span class="badge badge-accent"><?= htmlspecialchars($row['type_name'] ?? 'Pet') ?></span>
+                                        <span class="badge badge-gold"><?= htmlspecialchars($row['breed_name'] ?? 'Breed') ?></span>
+                                    </div>
+                                </td>
+                                <td style="text-align: right;">
+                                    <a href="remove_from_cart.php?id=<?= $row['id'] ?>" class="btn btn-danger" style="padding: 6px 16px; font-size: 0.85rem;" onclick="return confirm('Remove <?= htmlspecialchars($row['name']) ?> from your cart?')">
+                                        Remove Pet
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 26px; padding-top: 20px; border-top: 2px dashed var(--border-color);">
+                    <a href="browse.php" class="btn btn-secondary">&larr; Back to Roster</a>
+                    <form action="checkout.php" method="post" style="margin: 0;">
+                        <button type="submit" class="btn btn-primary" style="padding: 14px 34px; font-size: 1.1rem;">
+                            Submit Reservation Request &rarr;
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="empty-state">
+                <div class="empty-state-title">No Reservations Logged</div>
+                <a href="browse.php" class="btn btn-primary">Browse Pets</a>
+            </div>
+            <?php
+        }
+    }
+    ?>
+</main>
+
+<?php include ('includes/footer.php'); ?>

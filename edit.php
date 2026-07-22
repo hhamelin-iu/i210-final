@@ -1,6 +1,99 @@
 <?php
-$page_title = "Edit Entry";
-include ('includes/header.php');?>
+$page_title = "Edit Pet Entry - Admin Mode";
+include ('includes/header.php');
+include_once ('includes/alert.php');
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$role = $_SESSION['role'] ?? 0;
+if ($role != 1) {
+    set_alert("Admin privileges required to edit pet entries.", "error");
+    header("Location: browse.php");
+    exit();
+}
+
+include('includes/config.php');
+include('includes/connect.php');
+
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if ($id <= 0) {
+    set_alert("Invalid pet ID specified.", "error");
+    header("Location: browse.php");
+    exit();
+}
+
+$animal_types = [];
+if (isset($conn) && !$conn->connect_error) {
+    $animal_types_query = "SELECT id, type_name FROM animal_types";
+    if ($result = $conn->query($animal_types_query)) {
+        while ($row = $result->fetch_assoc()) {
+            $animal_types[] = $row;
+        }
+        $result->free();
+    }
+}
+
+$pet = null;
+$stmt = $conn->prepare("SELECT * FROM pets WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$res = $stmt->get_result();
+if ($res && $res->num_rows > 0) {
+    $pet = $res->fetch_assoc();
+} else {
+    set_alert("Pet record not found.", "error");
+    header("Location: browse.php");
+    exit();
+}
+$stmt->close();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['delete_action'])) {
+        $del_stmt = $conn->prepare("DELETE FROM pets WHERE id = ?");
+        $del_stmt->bind_param("i", $id);
+        if ($del_stmt->execute()) {
+            set_alert("Pet entry deleted from roster.", "info");
+            header("Location: browse.php");
+            exit();
+        } else {
+            set_alert("Error deleting pet entry: " . $del_stmt->error, "error");
+        }
+        $del_stmt->close();
+    } else {
+        $name = trim($_POST['name'] ?? '');
+        $animal = intval($_POST['animal'] ?? 0);
+        $breed = intval($_POST['breed'] ?? 0);
+        $age = intval($_POST['age'] ?? 0);
+        $description = trim($_POST['description'] ?? '');
+        $behavior = trim($_POST['behavior'] ?? '');
+
+        $photo = $pet['photo'];
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $tmp_name = $_FILES['photo']['tmp_name'];
+            $original_name = basename($_FILES['photo']['name']);
+            $target_path = 'www/img/animals/' . time() . '_' . preg_replace("/[^a-zA-Z0-9\._-]/", "", $original_name);
+
+            if (move_uploaded_file($tmp_name, $target_path)) {
+                $photo = $target_path;
+            }
+        }
+
+        $up_stmt = $conn->prepare("UPDATE pets SET name = ?, animal = ?, breed = ?, age = ?, description = ?, behavior = ?, photo = ? WHERE id = ?");
+        $up_stmt->bind_param("siissssi", $name, $animal, $breed, $age, $description, $behavior, $photo, $id);
+
+        if ($up_stmt->execute()) {
+            set_alert("Pet '$name' updated successfully!", "success");
+            header("Location: animal_details.php?id=$id");
+            exit();
+        } else {
+            set_alert("Error updating record: " . $up_stmt->error, "error");
+        }
+        $up_stmt->close();
+    }
+}
+?>
     <link rel="stylesheet" href="www/css/edit.css">
     <script src="www/js/updateBreeds.js"></script>
     <script>
@@ -10,141 +103,79 @@ include ('includes/header.php');?>
     </script>
 </head>
 
-<?php
-include('includes/config.php');
-include('includes/connect.php');
-
-// Fetch animal types
-$animal_types = [];
-$animal_types_query = "SELECT id, type_name FROM animal_types";
-if ($result = $conn->query($animal_types_query)) {
-    while ($row = $result->fetch_assoc()) {
-        $animal_types[] = $row;
-    }
-    $result->free();
-}
-
-// Fetch the pet data for editing
-$pet = null;
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $stmt = $conn->prepare("SELECT * FROM pets WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        $pet = $result->fetch_assoc();
-    } else {
-        die("Pet not found.");
-    }
-    $stmt->close();
-} else {
-    die("No pet ID specified.");
-}
-
-// Handle form submission for updates
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        // Delete the pet entry
-        $stmt = $conn->prepare("DELETE FROM pets WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        if ($stmt->execute()) {
-            echo "Pet entry deleted successfully.";
-            header("Location: browse.php"); // Redirect to browse.php
-            exit();
-        } else {
-            echo "Error deleting pet: " . $stmt->error;
-        }
-        $stmt->close();
-    } else {
-        $name = $_POST['name'] ?? '';
-        $animal = $_POST['animal'] ?? '';
-        $breed = $_POST['breed'] ?? '';
-        $age = $_POST['age'] ?? '';
-        $description = $_POST['description'] ?? '';
-        $behavior = $_POST['behavior'] ?? '';
-
-        // Handle file upload
-        $upload_dir = 'www/img/animals/';
-        $photo = $pet['photo']; // Retain current photo by default
-
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-            $tmp_name = $_FILES['photo']['tmp_name'];
-            $original_name = basename($_FILES['photo']['name']);
-            $target_path = $upload_dir . time() . '_' . $original_name;
-
-            if (move_uploaded_file($tmp_name, $target_path)) {
-                $photo = $target_path;
-            } else {
-                echo "Error uploading file.";
-            }
-        }
-
-        // Update the pet record
-        $stmt = $conn->prepare("UPDATE pets SET name = ?, animal = ?, breed = ?, age = ?, description = ?, behavior = ?, photo = ? WHERE id = ?");
-        $stmt->bind_param("siissssi", $name, $animal, $breed, $age, $description, $behavior, $photo, $id);
-
-        if ($stmt->execute()) {
-            echo "Pet entry updated successfully.";
-            header("Location: animal_details.php?id=$id");
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-
-        $stmt->close();
-        // Redirect to the relevant animal details page
-        header("Location: animal_details.php?id=$id");
-    }
-}
-
-$conn->close();
+<?php 
+include ('includes/navbar.php');
+render_alert();
 ?>
 
-<body>
-    <h1>Edit Pet Entry</h1>
-    <form action="" method="POST" enctype="multipart/form-data">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($pet['name']); ?>" required><br><br>
+<main class="container">
+    <a href="animal_details.php?id=<?= $id ?>" class="breadcrumb-link">&larr; Back to Pet Profile</a>
 
-        <label for="animal">Animal Type:</label><br>
-        <select id="animal" name="animal" required>
-            <option value="">Select an animal type</option>
-            <?php foreach ($animal_types as $type): ?>
-                <option value="<?php echo htmlspecialchars($type['id']); ?>" <?php echo $pet['animal'] == $type['id'] ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($type['type_name']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br><br>
+    <div class="glass-card admin-form-card">
+        <div style="margin-bottom: 24px;">
+            <span class="badge badge-admin">ADMIN PORTAL</span>
+            <h1 style="font-size: 2.2rem; margin-top: 6px; color: var(--neon-pink);">Edit Pet Entry: <?= htmlspecialchars($pet['name']) ?></h1>
+        </div>
 
-        <label for="breed">Breed:</label><br>
-        <select id="breed" name="breed" data-selected-breed="<?php echo htmlspecialchars($pet['breed'] ?? ''); ?>" required>
-            <option value="">Select a breed</option>
-        </select><br><br>
+        <form action="edit.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Pet Name *</label>
+                <input type="text" id="name" name="name" value="<?= htmlspecialchars($pet['name']) ?>" required>
+            </div>
 
-        <label for="age">Age:</label><br>
-        <input type="number" id="age" name="age" value="<?php echo htmlspecialchars($pet['age']); ?>" required><br><br>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label for="animal">Animal Type *</label>
+                    <select id="animal" name="animal" required>
+                        <option value="">Select Type</option>
+                        <?php foreach ($animal_types as $type): ?>
+                            <option value="<?= $type['id'] ?>" <?= $pet['animal'] == $type['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($type['type_name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
 
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" required><?php echo htmlspecialchars($pet['description']); ?></textarea><br><br>
-
-        <label for="behavior">Behavior:</label><br>
-        <input type="text" id="behavior" name="behavior" value="<?php echo htmlspecialchars($pet['behavior']); ?>" required><br><br>
-
-        <div class="photo-section">
-            <p class="current-photo-label">Current Photo:</p>
-            <div class="photo-wrapper">
-                <img src="<?php echo htmlspecialchars($pet['photo']); ?>" alt="Current Photo" class="current-photo">
-                <div class="update-photo">
-                    <label for="photo">Update Photo:</label><br>
-                    <input type="file" id="photo" name="photo" accept="image/*">
+                <div class="form-group">
+                    <label for="breed">Breed *</label>
+                    <select id="breed" name="breed" data-selected-breed="<?= htmlspecialchars($pet['breed']) ?>" required>
+                        <option value="">Select Breed</option>
+                    </select>
                 </div>
             </div>
-        </div>
-        <div class="button-container">
-            <button type="submit" name="update" value="1">Update Entry</button>
-            <button type="submit" name="delete" value="1" style="background-color: red; color: white;" 
-                onclick="return confirm('Are you sure you want to delete this pet?');">Delete Entry</button>
-        </div>
-    </form>
-</body>
-</html>
+
+            <div class="form-group">
+                <label for="age">Age (Years) *</label>
+                <input type="number" id="age" name="age" min="0" max="100" value="<?= htmlspecialchars($pet['age']) ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="behavior">Behavior & Temperament *</label>
+                <input type="text" id="behavior" name="behavior" value="<?= htmlspecialchars($pet['behavior']) ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Profile Description & History *</label>
+                <textarea id="description" name="description" rows="4" required><?= htmlspecialchars($pet['description']) ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Current Photo</label>
+                <div class="photo-preview-box">
+                    <img src="<?= htmlspecialchars($pet['photo']) ?>" alt="<?= htmlspecialchars($pet['name']) ?>" class="current-photo-thumb">
+                    <div class="file-input-wrapper">
+                        <label for="photo">Update Photo (Optional)</label>
+                        <input type="file" id="photo" name="photo" accept="image/*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button type="submit" name="update_action" class="btn btn-primary" style="flex: 1; padding: 14px;">Save Changes &rarr;</button>
+                <button type="submit" name="delete_action" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this pet entry?');">Delete Pet Entry</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<?php include ('includes/footer.php'); ?>

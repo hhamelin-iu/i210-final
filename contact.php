@@ -1,49 +1,58 @@
 <?php
-$page_title = "Contact Us";
+$page_title = "Contact Us - Silly Sanctuary";
 include('includes/header.php');
-?>
-    <link rel="stylesheet" href="www/css/index.css">
-</head>
-<?php include('includes/navbar.php'); ?>
-    <h1 class="contact-header">Contact Us</h1>
-    <div>
-    <?php 
-    //Whoops, this would only work if I setup a mailserver. Which I know how to do but don't think would be worth it haha.
-    if (false) {
-        // Get the form data
-        $to = "hhamelin@iu.edu";
-        $from = $_POST['email'];
-        $full_name = $_POST['name'];
-        $subject = "Form submission";
-        $subject2 = "Copy of your form submission";
-        $message = $full_name . " wrote the following:" . "\n\n" . $_POST['message'];
-        $message2 = "Here is a copy of your message " . $full_name . "\n\n" . $_POST['message'];
+include_once('includes/alert.php');
 
-        $headers = "From:" . $from;
-        $headers2 = "From:" . $to;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $message = trim($_POST['message'] ?? '');
 
-        if(mail($to, $subject, $message, $headers) && mail($from, $subject2, $message2, $headers2)) {
-            echo "Mail Sent. Thank you " . $full_name . ", we will contact you shortly.";
-        } else {
-            echo "Sorry, there was an error sending your message.";
-        }
+    if (!empty($name) && !empty($email) && !empty($message)) {
+        set_alert("Thank you, $name! Your message has been received. Our adoption staff will get back to you shortly.", "success");
+    } else {
+        set_alert("Please complete all message fields.", "warning");
     }
-    ?>
-    </div>
-    <div class="contact-wrapper">
-        <p style="width:300px;">Who we are: We aim to give a home to every animal without one. Whether it be a green alien cat, green alien dog, or some other third thing, we've got it.</p>
+}
+?>
+</head>
+
+<?php 
+include('includes/navbar.php');
+render_alert();
+?>
+
+<main class="container">
+    <div style="max-width: 680px; margin: 30px auto;" class="glass-card">
+        <div style="text-align: center; margin-bottom: 26px;">
+            <span class="badge badge-accent">Contact Sanctuary Staff</span>
+            <h1 style="font-size: 2.4rem; margin-top: 8px; color: var(--neon-cyan);">Send Us a Message</h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Have questions about pet adoption, requirements, or care? Send a message to our staff below!
+            </p>
+        </div>
+
         <form action="contact.php" method="POST">
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" required><br><br>
-            
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
-            
-            <label for="message">Message:</label><br>
-            <textarea id="message" name="message" rows="5" required></textarea><br><br>
-            
-            <button type="submit" name="submit">Send Message</button>
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" placeholder="How can we help you find your pet?" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;">
+                Send Message &rarr;
+            </button>
         </form>
     </div>
-</body>
-</html>
+</main>
+
+<?php include('includes/footer.php'); ?>

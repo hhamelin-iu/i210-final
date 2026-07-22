@@ -1,0 +1,8 @@
+{
+  "name": "i210-final",
+  "version": "1.0.0",
+  "description": "Silly Sanctuary Pet Adoption Portal",
+  "scripts": {
+    "start": "php -S localhost:8000"
+  }
+}

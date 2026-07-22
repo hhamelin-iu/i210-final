@@ -1,54 +1,31 @@
 <?php
-$page_title = "Add to Cart";
-include ('includes/header.php');?>
-</head>
-
-<?php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+include_once ('includes/alert.php');
 
-$login_status = isset($_SESSION['login_status']) ? $_SESSION['login_status'] : 0;
+$login_status = $_SESSION['login_status'] ?? 0;
 
 if ($login_status == 0) {
-    include ('includes/navbar.php');
-    echo "<h2>Error: Cannot Reserve Pet</h2>";
-    echo "<p>Please login to reserve a pet.</p>";
-    echo "</body>";
+    set_alert("Please sign in to reserve a pet.", "warning");
+    header("Location: loginform.php");
     exit();
 }
 
-if (isset($_SESSION['cart'])) {
-    $cart = $_SESSION['cart'];
-    } else {
-    $cart = array();
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+if ($id <= 0) {
+    set_alert("Invalid pet selection.", "error");
+    header("Location: browse.php");
+    exit();
 }
 
-//if pet id cannot be found, terminate script.
-if (!filter_has_var(INPUT_GET, 'id')) {
-    $error = "Pet id not found. Operation cannot proceed.<br><br>";
-    header("Location: error.php?m=$error");
-    die();
+if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
+    $_SESSION['cart'] = array();
 }
 
-//retrieve pet id and make sure it is a numeric value.
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-if (!is_numeric($id)) {
-    $error = "Invalid Pet id. Operation cannot proceed.<br><br>";
-    header("Location: error.php?m=$error");
-    die();
-}
+$_SESSION['cart'][$id] = 1;
 
-// Check for the pet ID in the cart
-if (isset($cart[$id])) {
-    //no longer keeping track of count, so this is commented out for now
-    // $cart[$id] += 1;
-} else {
-    $cart[$id] = 1;
-}
-
-//update the session variable
-$_SESSION['cart'] = $cart;
-
-//redirect to the show_cart.php page.
+set_alert("Pet successfully added to your reservation cart!", "success");
 header('Location: show_cart.php');
+exit();
