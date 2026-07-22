@@ -1,6 +1,6 @@
 <?php
 // Authors: Haven Hamelin
-$page_title = "Silly Sanctuary - Adopt Your Next Companion";
+$page_title = "Silly Sanctuary";
 include ('includes/header.php');
 include_once ('includes/alert.php');
 ?>
