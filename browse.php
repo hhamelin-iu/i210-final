@@ -278,6 +278,11 @@ render_alert();
         <div class="empty-state">
             <div class="empty-state-title">Database Offline</div>
             <div class="empty-state-desc">Unable to query the pet database right now. Please check back shortly.</div>
+            <?php if (!empty($db_connection_error)): ?>
+                <div style="margin-top: 12px; font-family: monospace; font-size: 0.85rem; color: #ff6b6b; background: rgba(255, 107, 107, 0.1); padding: 8px 12px; border-radius: 6px; display: inline-block;">
+                    MySQL Details: <?= htmlspecialchars($db_connection_error) ?>
+                </div>
+            <?php endif; ?>
         </div>
         <?php
     }

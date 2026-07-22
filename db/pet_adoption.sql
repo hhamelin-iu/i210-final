@@ -89,14 +89,15 @@ CREATE TABLE `pets` (
   `age` int(11) NOT NULL,
   `description` text NOT NULL,
   `behavior` varchar(200) NOT NULL,
-  `photo` varchar(255) NOT NULL
+  `photo` varchar(255) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Available'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pets`
 --
 
-INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`) VALUES
+INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`, `status`) VALUES
 (1, 'Almano', 2, 10, 6, 'Introducing Almano, an absolute sweetheart with a big heart and a unique charm!
 
 Almano Biography [ ]
