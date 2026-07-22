@@ -53,10 +53,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <!-- Right Side Controls -->
         <div class="nav-user-controls">
-            <?php if ($role == 1): ?>
-                <span class="badge badge-admin">ADMIN MODE</span>
-            <?php endif; ?>
-
             <!-- Cart Pill -->
             <a href="show_cart.php" class="cart-pill" title="View Reservation Cart">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +65,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
             <!-- User Auth Status -->
             <?php if ($login_status != 0): ?>
-                <span class="user-welcome">Welcome, <strong class="user-name"><?= htmlspecialchars($name) ?></strong></span>
+                <div class="user-profile-container">
+                    <?php if ($role == 1): ?>
+                        <span class="badge badge-admin badge-admin-overlay">ADMIN MODE</span>
+                    <?php endif; ?>
+                    <span class="user-welcome">Welcome, <strong class="user-name"><?= htmlspecialchars($name) ?></strong></span>
+                </div>
                 <a href="logout.php" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">Log Out</a>
             <?php else: ?>
                 <a href="loginform.php" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.95rem;">Sign In</a>
