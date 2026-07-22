@@ -29,6 +29,7 @@ if (isset($conn) && !$conn->connect_error) {
         
         // Verify password
         if ($password === $row['password']) {
+            $_SESSION['user_id'] = (int)$row['id'];
             $_SESSION['login'] = $username;
             $_SESSION['role'] = (int)$row['role'];
             $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];

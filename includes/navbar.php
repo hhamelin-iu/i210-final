@@ -36,6 +36,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <li class="nav-item">
                 <a href="browse.php" class="<?= ($current_page == 'browse.php' || $current_page == 'animal_details.php') ? 'active' : '' ?>">Browse Pets</a>
             </li>
+            <?php if ($login_status != 0): ?>
+                <li class="nav-item">
+                    <a href="my_reservations.php" class="<?= ($current_page == 'my_reservations.php') ? 'active' : '' ?>">My Applications</a>
+                </li>
+            <?php endif; ?>
+            <?php if ($role == 1): ?>
+                <li class="nav-item">
+                    <a href="manage_reservations.php" class="<?= ($current_page == 'manage_reservations.php') ? 'active' : '' ?>">Manage Applications</a>
+                </li>
+            <?php endif; ?>
             <li class="nav-item">
                 <a href="contact.php" class="<?= ($current_page == 'contact.php') ? 'active' : '' ?>">Contact Us</a>
             </li>

@@ -3,6 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 include_once ('includes/alert.php');
+include_once ('includes/connect.php');
 
 $login_status = $_SESSION['login_status'] ?? 0;
 
@@ -20,12 +21,27 @@ if ($id <= 0) {
     exit();
 }
 
+// Check pet availability status in DB
+if (isset($conn) && !$conn->connect_error) {
+    $stmt = $conn->prepare("SELECT name, status FROM pets WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($row = $res->fetch_assoc()) {
+        if ($row['status'] !== 'Available') {
+            set_alert("Sorry, " . htmlspecialchars($row['name']) . " is currently " . strtolower($row['status']) . " and unavailable for reservation.", "warning");
+            header("Location: browse.php");
+            exit();
+        }
+    }
+}
+
 if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
 }
 
 $_SESSION['cart'][$id] = 1;
 
-set_alert("Pet successfully added to your reservation cart!", "success");
+set_alert("Pet successfully added to your reservation list!", "success");
 header('Location: show_cart.php');
 exit();

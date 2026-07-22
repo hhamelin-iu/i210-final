@@ -185,11 +185,14 @@ def escape_sql(text):
     escaped = text.replace("\\", "\\\\").replace("'", "''").replace("\r", "").replace("\n", "\\n")
     return f"'{escaped}'"
 
-def determine_breed_id(title, infobox, raw_text):
+def determine_breed_id(animal_type_id, title, infobox, raw_text):
+    if animal_type_id == 1:
+        return 1 # Pug / Dog default
+    if animal_type_id == 3:
+        return 3 # Parrot / Bird default
+        
     text_lower = (title + " " + json.dumps(infobox) + " " + raw_text[:400]).lower()
     
-    if 'dog' in text_lower or 'shiba' in text_lower or 'ferret' in text_lower or 'puppy' in text_lower:
-        return 1 # Pug / Dog default
     if 'sphynx' in text_lower or 'hairless' in text_lower or 'bingus' in text_lower:
         return 8 # Sphynx
     if 'caracal' in text_lower or 'floppa' in text_lower or 'bengal' in text_lower:
@@ -209,7 +212,7 @@ def determine_breed_id(title, infobox, raw_text):
     if 'siamese' in text_lower:
         return 7 # Siamese
         
-    cat_breed_ids = [2, 4, 5, 6, 7, 9, 10, 13, 14, 15]
+    cat_breed_ids = [2, 4, 5, 6, 7, 9, 10, 12, 13, 14, 15]
     h = sum(ord(c) for c in title)
     return cat_breed_ids[h % len(cat_breed_ids)]
 
@@ -308,12 +311,14 @@ def main():
         clean_name = title.strip()
         
         animal_type_id = 2 # Cat
-        if 'dog' in clean_name.lower() or 'puppy' in clean_name.lower():
-            animal_type_id = 1
+        if 'geeble' in clean_name.lower() or 'dog' in clean_name.lower() or 'puppy' in clean_name.lower():
+            animal_type_id = 1 # Dog
         elif 'bird' in clean_name.lower() or 'parrot' in clean_name.lower():
             animal_type_id = 3
             
-        breed_id = determine_breed_id(clean_name, infobox, raw_text)
+        breed_id = determine_breed_id(animal_type_id, clean_name, infobox, raw_text)
+        if 'geeble' in clean_name.lower():
+            breed_id = 1 # Pug
         
         h = sum(ord(ch) for ch in clean_name)
         age = (h % 7) + 1
@@ -331,7 +336,8 @@ def main():
             'age': age,
             'description': desc,
             'behavior': behavior,
-            'photo': photo_path
+            'photo': photo_path,
+            'status': 'Available'
         })
         pet_id += 1
         
@@ -343,7 +349,7 @@ def main():
             active_image_filenames.add(os.path.basename(p['photo']))
             
     # Essential pre-existing site assets to preserve
-    essential_assets = {'glooble.jpg', 'bleemk.png', 'geeble.png', '1734197731_glorpo.png', '1734214207_gnapy.png', '1734214327_zim_zorp.png', '1734477626_LORE Club Logo.png', '1734477808_AdobeStock_189776679.jpeg', '1734478936_AdobeStock_281792532.jpeg'}
+    essential_assets = {'glooble.jpg', 'bleemk.png', 'geeble.png', 'tole_tole.gif', 'tole_tole.png', '1734197731_glorpo.png', '1734214207_gnapy.png', '1734214327_zim_zorp.png', '1734477626_LORE Club Logo.png', '1734477808_AdobeStock_189776679.jpeg', '1734478936_AdobeStock_281792532.jpeg'}
     active_image_filenames.update(essential_assets)
     
     removed_images_count = 0
@@ -370,6 +376,25 @@ def main():
     sql_lines.append("TRUNCATE TABLE `breeds`;")
     sql_lines.append("SET FOREIGN_KEY_CHECKS = 1;\n")
     
+    # Ensure pets has status column
+    sql_lines.append("ALTER TABLE `pets` ADD COLUMN IF NOT EXISTS `status` VARCHAR(50) NOT NULL DEFAULT 'Available';\n")
+    
+    # Ensure reservations table exists
+    sql_lines.append("-- Table structure for table `reservations`")
+    sql_lines.append("CREATE TABLE IF NOT EXISTS `reservations` (")
+    sql_lines.append("  `id` int(11) NOT NULL AUTO_INCREMENT,")
+    sql_lines.append("  `user_id` int(11) NOT NULL,")
+    sql_lines.append("  `pet_id` int(11) NOT NULL,")
+    sql_lines.append("  `status` varchar(50) NOT NULL DEFAULT 'Pending',")
+    sql_lines.append("  `notes` text DEFAULT NULL,")
+    sql_lines.append("  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,")
+    sql_lines.append("  PRIMARY KEY (`id`),")
+    sql_lines.append("  KEY `user_id` (`user_id`),")
+    sql_lines.append("  KEY `pet_id` (`pet_id`),")
+    sql_lines.append("  CONSTRAINT `fk_reservations_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,")
+    sql_lines.append("  CONSTRAINT `fk_reservations_pet` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE")
+    sql_lines.append(") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n")
+
     # Insert Breeds
     sql_lines.append("-- Dumping data for table `breeds`")
     sql_lines.append("INSERT INTO `breeds` (`id`, `breed_name`, `animal_type_id`) VALUES")
@@ -378,10 +403,10 @@ def main():
     
     # Insert Pets
     sql_lines.append("-- Dumping data for table `pets`")
-    sql_lines.append("INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`) VALUES")
+    sql_lines.append("INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`, `status`) VALUES")
     pet_values = []
     for p in pet_rows:
-        val = f"({p['id']}, {escape_sql(p['name'])}, {p['animal']}, {p['breed']}, {p['age']}, {escape_sql(p['description'])}, {escape_sql(p['behavior'])}, {escape_sql(p['photo'])})"
+        val = f"({p['id']}, {escape_sql(p['name'])}, {p['animal']}, {p['breed']}, {p['age']}, {escape_sql(p['description'])}, {escape_sql(p['behavior'])}, {escape_sql(p['photo'])}, {escape_sql(p['status'])})"
         pet_values.append(val)
     sql_lines.append(",\n".join(pet_values) + ";\n")
     

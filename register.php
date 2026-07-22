@@ -31,10 +31,12 @@ $stmt = $conn->prepare($sql);
 if ($stmt) {
     $stmt->bind_param("ssss", $firstname, $lastname, $username, $password);
     if ($stmt->execute()) {
+        $new_id = $conn->insert_id;
+        $_SESSION['user_id'] = (int)$new_id;
         $_SESSION['login'] = $username;
         $_SESSION['name'] = "$firstname $lastname";
         $_SESSION['role'] = 2;
-        $_SESSION['login_status'] = 3;
+        $_SESSION['login_status'] = 1;
 
         set_alert("Account created successfully! Welcome to Silly Sanctuary.", "success");
         header("Location: index.php");
