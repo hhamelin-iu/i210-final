@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
             $tmp_name = $_FILES['photo']['tmp_name'];
             $original_name = basename($_FILES['photo']['name']);
-            $target_path = 'www/img/animals/' . time() . '_' . preg_replace("/[^a-zA-Z0-9\._-]/", "", $original_name);
+            $target_path = 'img/animals/' . time() . '_' . preg_replace("/[^a-zA-Z0-9\._-]/", "", $original_name);
 
             if (move_uploaded_file($tmp_name, $target_path)) {
                 $photo = $target_path;

@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = trim($_POST['description'] ?? '');
     $behavior = trim($_POST['behavior'] ?? '');
 
-    $upload_dir = 'www/img/animals/';
-    $photo = 'www/img/animals/bleemk.png';
+    $upload_dir = 'img/animals/';
+    $photo = 'img/animals/bleemk.png';
 
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $tmp_name = $_FILES['photo']['tmp_name'];
