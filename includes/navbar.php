@@ -65,9 +65,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
             <!-- User Auth Status -->
             <?php if ($login_status != 0): ?>
-                <div class="user-profile-container">
+                <div class="user-profile-container <?= ($role == 1) ? 'is-admin' : '' ?>">
                     <?php if ($role == 1): ?>
-                        <span class="badge badge-admin badge-admin-overlay">ADMIN MODE</span>
+                        <span class="badge-admin-overlay">ADMIN MODE</span>
                     <?php endif; ?>
                     <span class="user-welcome">Welcome, <strong class="user-name"><?= htmlspecialchars($name) ?></strong></span>
                 </div>
