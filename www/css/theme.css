@@ -319,3 +319,51 @@ a:hover {
     font-size: 0.95rem;
     margin-bottom: 24px;
 }
+
+/* Mobile Responsive Utility Rules */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px 14px;
+    }
+
+    .glass-card {
+        padding: 18px 14px;
+    }
+
+    .empty-state {
+        padding: 32px 16px;
+        margin: 20px auto;
+    }
+
+    .btn {
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --navbar-height: 70px;
+    }
+
+    html, body {
+        font-size: 15px;
+    }
+
+    .container {
+        padding: 12px 10px;
+    }
+
+    .glass-card {
+        padding: 14px 12px;
+        border-radius: 16px 6px 16px 6px;
+    }
+
+    h1 {
+        font-size: 1.8rem !important;
+    }
+
+    h2 {
+        font-size: 1.3rem !important;
+    }
+}
+

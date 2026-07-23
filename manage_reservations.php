@@ -107,6 +107,43 @@ require_once('includes/header.php');
         .st-Approved { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
         .st-Adopted { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
         .st-Cancelled { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
+
+        @media (max-width: 768px) {
+            .admin-res-table, .admin-res-table thead, .admin-res-table tbody, .admin-res-table tr, .admin-res-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .admin-res-table thead {
+                display: none;
+            }
+
+            .admin-res-row {
+                margin-bottom: 16px;
+                border-radius: 16px !important;
+                padding: 16px;
+            }
+
+            .admin-res-row td {
+                padding: 6px 0 !important;
+                text-align: left !important;
+                border-radius: 0 !important;
+            }
+
+            .admin-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px dashed var(--border-color);
+            }
+
+            .admin-actions form, .admin-actions button {
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
 
@@ -178,7 +215,7 @@ render_alert();
                                     <span class="status-pill st-<?= $row['res_status'] ?>"><?= htmlspecialchars($row['res_status']) ?></span>
                                 </td>
                                 <td style="text-align: right;">
-                                    <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                    <div class="admin-actions" style="display: flex; gap: 8px; justify-content: flex-end;">
                                         <?php if ($row['res_status'] === 'Pending'): ?>
                                             <form action="manage_reservations.php" method="POST" style="display: inline;">
                                                 <input type="hidden" name="reservation_id" value="<?= $row['res_id'] ?>">

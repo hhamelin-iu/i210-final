@@ -112,6 +112,43 @@ require_once('includes/header.php');
         .status-approved { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #4ade80; }
         .status-adopted { background: rgba(6, 182, 212, 0.2); color: #38bdf8; border: 1px solid #38bdf8; }
         .status-cancelled { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #f87171; }
+
+        @media (max-width: 640px) {
+            .res-card {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 16px;
+            }
+
+            .res-card-left {
+                flex-direction: row;
+                align-items: center !important;
+                gap: 14px !important;
+            }
+
+            .res-card-right {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px !important;
+                align-items: stretch !important;
+                margin-top: 10px;
+                padding-top: 12px;
+                border-top: 1px dashed var(--border-color);
+            }
+
+            .res-card-right .btn, .res-card-right form {
+                width: 100%;
+            }
+
+            .res-card-right form button {
+                width: 100%;
+            }
+
+            .status-badge {
+                text-align: center;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -154,7 +191,7 @@ render_alert();
                 elseif ($status === 'Cancelled') $badge_class = 'status-cancelled';
                 ?>
                 <div class="res-card">
-                    <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="res-card-left" style="display: flex; align-items: center; gap: 20px;">
                         <img src="<?= htmlspecialchars($row['photo']) ?>" alt="<?= htmlspecialchars($row['pet_name']) ?>" class="res-thumb">
                         <div>
                             <div style="display: flex; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
@@ -168,7 +205,7 @@ render_alert();
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; gap: 16px;">
+                    <div class="res-card-right" style="display: flex; align-items: center; gap: 16px;">
                         <span class="status-badge <?= $badge_class ?>"><?= htmlspecialchars($status) ?></span>
                         <a href="animal_details.php?id=<?= $row['pet_id'] ?>" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;">View Profile</a>
                         <?php if ($status === 'Pending'): ?>

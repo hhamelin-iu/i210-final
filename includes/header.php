@@ -19,3 +19,4 @@ if (session_status() == PHP_SESSION_NONE) {
     <!-- Theme & Styles -->
     <link rel="stylesheet" href="www/css/theme.css">
     <link rel="stylesheet" href="www/css/styles.css">
+    <script src="www/js/mobile-nav.js" defer></script>

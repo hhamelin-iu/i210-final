@@ -44,12 +44,12 @@ function render_alert() {
     }
 
     echo "
-    <div style='max-width: 1200px; margin: 18px auto; padding: 14px 22px; background: {$bg_color}; border: 2px solid {$border_color}; border-radius: 18px 8px 18px 8px; color: {$text_color}; display: flex; align-items: center; justify-content: space-between; font-weight: 500; box-shadow: 0 0 15px {$border_color};'>
-        <div style='display: flex; align-items: center; gap: 12px;'>
+    <div style='width: calc(100% - 32px); max-width: 1200px; margin: 18px auto; padding: 14px 18px; background: {$bg_color}; border: 2px solid {$border_color}; border-radius: 18px 8px 18px 8px; color: {$text_color}; display: flex; align-items: center; justify-content: space-between; font-weight: 500; gap: 12px; box-shadow: 0 0 15px {$border_color};'>
+        <div style='display: flex; align-items: center; gap: 10px; flex: 1; flex-wrap: wrap;'>
             <span style='font-family: var(--font-pixel); font-size: 0.75rem; letter-spacing: 0.05em; background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 6px; border: 1px solid {$border_color};'>{$tag}</span>
-            <span>" . htmlspecialchars($alert['message']) . "</span>
+            <span style='word-break: break-word;'>" . htmlspecialchars($alert['message']) . "</span>
         </div>
-        <button onclick='this.parentElement.remove()' style='background: none; border: none; color: {$text_color}; cursor: pointer; font-size: 1.3rem; font-weight: bold;'>&times;</button>
+        <button onclick='this.parentElement.remove()' style='background: none; border: none; color: {$text_color}; cursor: pointer; font-size: 1.3rem; font-weight: bold; padding: 0 4px;'>&times;</button>
     </div>
     ";
 }

@@ -87,7 +87,7 @@ render_alert();
         <!-- Filter Form -->
         <div class="search-container" style="max-width: 850px;">
             <form action="browse.php" method="get" class="search-form" style="display: block;">
-                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <div class="search-form-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
                     <input type="text" name="terms" class="filter-input" placeholder="Search pet names, traits, or descriptions..." value="<?= htmlspecialchars($search_terms) ?>" />
                     <button type="submit" class="btn btn-primary" style="padding: 0 24px; white-space: nowrap;">Search</button>
                     <?php if (!empty($search_terms) || $type_filter > 0 || $breed_filter > 0 || $status_filter !== 'Available'): ?>

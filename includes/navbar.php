@@ -28,33 +28,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <span class="brand-title">Silly Sanctuary</span>
         </a>
 
-        <!-- Navigation Links -->
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="index.php" class="<?= ($current_page == 'index.php' || $current_page == '') ? 'active' : '' ?>">Home</a>
-            </li>
-            <li class="nav-item">
-                <a href="browse.php" class="<?= ($current_page == 'browse.php' || $current_page == 'animal_details.php') ? 'active' : '' ?>">Browse Pets</a>
-            </li>
-            <?php if ($login_status != 0): ?>
-                <li class="nav-item">
-                    <a href="my_reservations.php" class="<?= ($current_page == 'my_reservations.php') ? 'active' : '' ?>">My Applications</a>
-                </li>
-            <?php endif; ?>
-            <?php if ($role == 1): ?>
-                <li class="nav-item">
-                    <a href="manage_reservations.php" class="<?= ($current_page == 'manage_reservations.php') ? 'active' : '' ?>">Manage Applications</a>
-                </li>
-            <?php endif; ?>
-            <li class="nav-item">
-                <a href="contact.php" class="<?= ($current_page == 'contact.php') ? 'active' : '' ?>">Contact Us</a>
-            </li>
-        </ul>
-
-        <!-- Right Side Controls -->
-        <div class="nav-user-controls">
-            <!-- Cart Pill -->
-            <a href="show_cart.php" class="cart-pill" title="View Reservation Cart">
+        <!-- Mobile Controls & Hamburger Toggle -->
+        <div class="nav-mobile-actions">
+            <!-- Mobile Cart Pill -->
+            <a href="show_cart.php" class="cart-pill cart-pill-mobile" title="View Reservation Cart">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                 </svg>
@@ -63,18 +40,64 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </a>
 
-            <!-- User Auth Status -->
-            <?php if ($login_status != 0): ?>
-                <div class="user-profile-container <?= ($role == 1) ? 'is-admin' : '' ?>">
-                    <?php if ($role == 1): ?>
-                        <span class="badge-admin-overlay">ADMIN MODE</span>
+            <!-- Hamburger Button -->
+            <button class="nav-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+        </div>
+
+        <!-- Collapsible Mobile & Desktop Navigation Wrapper -->
+        <div class="nav-collapse">
+            <!-- Navigation Links -->
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.php" class="<?= ($current_page == 'index.php' || $current_page == '') ? 'active' : '' ?>">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="browse.php" class="<?= ($current_page == 'browse.php' || $current_page == 'animal_details.php') ? 'active' : '' ?>">Browse Pets</a>
+                </li>
+                <?php if ($login_status != 0): ?>
+                    <li class="nav-item">
+                        <a href="my_reservations.php" class="<?= ($current_page == 'my_reservations.php') ? 'active' : '' ?>">My Applications</a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($role == 1): ?>
+                    <li class="nav-item">
+                        <a href="manage_reservations.php" class="<?= ($current_page == 'manage_reservations.php') ? 'active' : '' ?>">Manage Applications</a>
+                    </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <a href="contact.php" class="<?= ($current_page == 'contact.php') ? 'active' : '' ?>">Contact Us</a>
+                </li>
+            </ul>
+
+            <!-- User Controls -->
+            <div class="nav-user-controls">
+                <!-- Desktop Cart Pill -->
+                <a href="show_cart.php" class="cart-pill cart-pill-desktop" title="View Reservation Cart">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <?php if ($cart_count > 0): ?>
+                        <span class="cart-count"><?= $cart_count ?></span>
                     <?php endif; ?>
-                    <span class="user-welcome">Welcome, <strong class="user-name"><?= htmlspecialchars($name) ?></strong></span>
-                </div>
-                <a href="logout.php" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">Log Out</a>
-            <?php else: ?>
-                <a href="loginform.php" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.95rem;">Sign In</a>
-            <?php endif; ?>
+                </a>
+
+                <!-- User Auth Status -->
+                <?php if ($login_status != 0): ?>
+                    <div class="user-profile-container <?= ($role == 1) ? 'is-admin' : '' ?>">
+                        <?php if ($role == 1): ?>
+                            <span class="badge-admin-overlay">ADMIN MODE</span>
+                        <?php endif; ?>
+                        <span class="user-welcome">Welcome, <strong class="user-name"><?= htmlspecialchars($name) ?></strong></span>
+                    </div>
+                    <a href="logout.php" class="btn btn-secondary nav-auth-btn" style="padding: 6px 14px; font-size: 0.85rem;">Log Out</a>
+                <?php else: ?>
+                    <a href="loginform.php" class="btn btn-primary nav-auth-btn" style="padding: 8px 18px; font-size: 0.95rem;">Sign In</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </header>

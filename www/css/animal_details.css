@@ -73,9 +73,24 @@
 @media (max-width: 868px) {
     .details-wrapper {
         grid-template-columns: 1fr;
+        gap: 24px;
     }
 
     .details-image-container img {
         height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .details-header-title {
+        font-size: 1.8rem;
+    }
+
+    .details-image-container img {
+        height: 240px;
+    }
+
+    .details-info {
+        gap: 16px;
     }
 }

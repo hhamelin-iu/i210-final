@@ -95,7 +95,7 @@ render_alert();
                 <input type="text" id="name" name="name" placeholder="e.g. Bleemk or Zim Zorp" required>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
                     <label for="animal">Animal Type *</label>
                     <select id="animal" name="animal" required>

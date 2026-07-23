@@ -43,6 +43,39 @@ require_once('includes/header.php');
             border-radius: 12px;
             border: 2px solid var(--neon-purple);
         }
+
+        @media (max-width: 640px) {
+            .cart-table, .cart-table thead, .cart-table tbody, .cart-table tr, .cart-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .cart-table thead {
+                display: none;
+            }
+
+            .cart-row {
+                margin-bottom: 16px;
+                border-radius: 16px !important;
+                padding: 16px;
+            }
+
+            .cart-row td {
+                padding: 8px 0 !important;
+                text-align: left !important;
+                border-radius: 0 !important;
+            }
+
+            .cart-actions {
+                flex-direction: column;
+                gap: 14px;
+                align-items: stretch !important;
+            }
+
+            .cart-actions .btn, .cart-actions form {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -119,7 +152,7 @@ render_alert();
                     </tbody>
                 </table>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 26px; padding-top: 20px; border-top: 2px dashed var(--border-color);">
+                <div class="cart-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 26px; padding-top: 20px; border-top: 2px dashed var(--border-color);">
                     <a href="browse.php" class="btn btn-secondary">&larr; Back to Roster</a>
                     <form action="checkout.php" method="post" style="margin: 0;">
                         <button type="submit" class="btn btn-primary" style="padding: 14px 34px; font-size: 1.1rem;">
