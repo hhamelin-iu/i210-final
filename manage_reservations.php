@@ -48,13 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['res
                     set_alert("Pet successfully marked as Adopted!", "success");
                 } elseif ($action === 'decline') {
                     $stmt_u = $conn->prepare("UPDATE reservations SET status = 'Cancelled' WHERE id = ?");
-                    $stmt_u->bind_param("i", $res_id);
-                    $stmt_u->execute();
+                    if ($stmt_u) {
+                        $stmt_u->bind_param("i", $res_id);
+                        $stmt_u->execute();
+                    }
 
-                    $stmt_p = $conn->prepare("UPDATE pets SET status = 'Available' WHERE id = ? WHERE id = ? AND status = 'Reserved'");
                     $stmt_p = $conn->prepare("UPDATE pets SET status = 'Available' WHERE id = ?");
-                    $stmt_p->bind_param("i", $pet_id);
-                    $stmt_p->execute();
+                    if ($stmt_p) {
+                        $stmt_p->bind_param("i", $pet_id);
+                        $stmt_p->execute();
+                    }
                     set_alert("Reservation cancelled and pet set to Available.", "info");
                 }
                 $conn->commit();
