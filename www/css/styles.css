@@ -192,51 +192,47 @@
     width: 100%;
     background: rgba(10, 5, 24, 0.95);
     border-top: 2px solid var(--neon-purple);
-    padding: 40px 0 20px 0;
-    margin-top: 60px;
+    padding: 20px 0 16px 0;
+    margin-top: 40px;
     box-shadow: 0 -10px 30px rgba(176, 38, 255, 0.15);
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 30px;
-    margin-bottom: 30px;
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
 }
 
-.footer-col h4 {
-    font-family: var(--font-heading);
-    font-size: 1.15rem;
-    margin-bottom: 16px;
-    color: var(--neon-cyan);
-}
-
-.footer-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-links li {
-    margin-bottom: 10px;
-}
-
-.footer-links a {
+.footer-tagline {
     color: var(--text-muted);
-    font-size: 0.95rem;
-}
-
-.footer-links a:hover {
-    color: var(--neon-green);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 550px;
 }
 
 .footer-bottom {
     text-align: center;
-    padding-top: 20px;
+    padding-top: 10px;
     border-top: 1px dashed rgba(176, 38, 255, 0.2);
+    width: 100%;
+    max-width: 550px;
     color: var(--text-muted);
     font-family: var(--font-pixel);
     font-size: 0.75rem;
+}
+
+.footer-bottom a {
+    color: var(--neon-cyan);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-bottom a:hover {
+    color: var(--neon-pink);
+    text-decoration: underline;
 }
 
 .navbar {
@@ -413,10 +409,5 @@
     .brand-icon svg {
         width: 22px;
         height: 22px;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
     }
 }
