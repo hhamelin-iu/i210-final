@@ -427,3 +427,116 @@
         display: none;
     }
 }
+
+/* Portfolio Return Banner */
+.portfolio-return-banner {
+    background: linear-gradient(90deg, #181136 0%, #29104d 50%, #181136 100%);
+    border-bottom: 2px solid #b026ff;
+    box-shadow: 0 4px 20px rgba(176, 38, 255, 0.25);
+    color: #ffffff;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    padding: 10px 20px;
+    position: relative;
+    z-index: 1001;
+    max-height: 200px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, opacity 0.3s ease;
+}
+
+.portfolio-return-banner.portfolio-banner-closing {
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-bottom-width: 0 !important;
+    border-bottom-color: transparent !important;
+    opacity: 0 !important;
+}
+
+.portfolio-banner-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.portfolio-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.92rem;
+}
+
+.portfolio-banner-badge {
+    background: linear-gradient(135deg, #00f0ff, #b026ff);
+    color: #0b071e;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.portfolio-banner-text {
+    color: #e2e8f0;
+}
+
+.portfolio-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.portfolio-return-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 240, 255, 0.12);
+    color: #00f0ff;
+    border: 1px solid #00f0ff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.portfolio-return-btn:hover {
+    background: #00f0ff;
+    color: #0b071e;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+    text-decoration: none;
+}
+
+.portfolio-banner-close {
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.2s ease;
+}
+
+.portfolio-banner-close:hover {
+    color: #ff2a85;
+}
+
+@media (max-width: 768px) {
+    .portfolio-banner-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .portfolio-banner-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

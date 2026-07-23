@@ -16,6 +16,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
 <body>
+<?php include_once __DIR__ . '/portfolio_banner.php'; ?>
 <header class="navbar-header">
     <div class="navbar-container">
         <!-- Cat Paw / Pet Logo -->
