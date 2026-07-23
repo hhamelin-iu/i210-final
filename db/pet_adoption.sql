@@ -97,7 +97,7 @@ CREATE TABLE `pets` (
 -- Dumping data for table `pets`
 --
 
-INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`) VALUES
+INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`, `status`) VALUES
 (1, 'Almano', 2, 10, 6, 'Introducing Almano, an absolute sweetheart with a big heart and a unique charm!
 
 Almano Biography [ ]

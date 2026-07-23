@@ -1,17 +1,31 @@
 -- Silly Cats Wiki Pet Adoption Database Import Script
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-ALTER TABLE `animal_types` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-ALTER TABLE `breeds` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-ALTER TABLE `pets` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-TRUNCATE TABLE `pets`;
-TRUNCATE TABLE `breeds`;
-SET FOREIGN_KEY_CHECKS = 1;
+DROP TABLE IF EXISTS `reservations`;
+DROP TABLE IF EXISTS `pets`;
+DROP TABLE IF EXISTS `breeds`;
 
-ALTER TABLE `pets` ADD COLUMN IF NOT EXISTS `status` VARCHAR(50) NOT NULL DEFAULT 'Available';
+CREATE TABLE `breeds` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `breed_name` varchar(200) NOT NULL,
+  `animal_type_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Table structure for table `reservations`
-CREATE TABLE IF NOT EXISTS `reservations` (
+CREATE TABLE `pets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `animal` int(11) NOT NULL,
+  `breed` int(255) NOT NULL,
+  `age` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `behavior` varchar(200) NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Available',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `reservations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `pet_id` int(11) NOT NULL,
@@ -24,6 +38,8 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   CONSTRAINT `fk_reservations_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_reservations_pet` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- Dumping data for table `breeds`
 INSERT INTO `breeds` (`id`, `breed_name`, `animal_type_id`) VALUES

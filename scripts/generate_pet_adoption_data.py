@@ -369,19 +369,31 @@ def main():
     sql_lines.append("-- Silly Cats Wiki Pet Adoption Database Import Script")
     sql_lines.append("SET NAMES utf8mb4;")
     sql_lines.append("SET FOREIGN_KEY_CHECKS = 0;")
-    sql_lines.append("ALTER TABLE `animal_types` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;")
-    sql_lines.append("ALTER TABLE `breeds` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;")
-    sql_lines.append("ALTER TABLE `pets` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;")
-    sql_lines.append("TRUNCATE TABLE `pets`;")
-    sql_lines.append("TRUNCATE TABLE `breeds`;")
-    sql_lines.append("SET FOREIGN_KEY_CHECKS = 1;\n")
+    sql_lines.append("DROP TABLE IF EXISTS `reservations`;")
+    sql_lines.append("DROP TABLE IF EXISTS `pets`;")
+    sql_lines.append("DROP TABLE IF EXISTS `breeds`;\n")
     
-    # Ensure pets has status column
-    sql_lines.append("ALTER TABLE `pets` ADD COLUMN IF NOT EXISTS `status` VARCHAR(50) NOT NULL DEFAULT 'Available';\n")
+    sql_lines.append("CREATE TABLE `breeds` (")
+    sql_lines.append("  `id` int(11) NOT NULL AUTO_INCREMENT,")
+    sql_lines.append("  `breed_name` varchar(200) NOT NULL,")
+    sql_lines.append("  `animal_type_id` int(11) NOT NULL,")
+    sql_lines.append("  PRIMARY KEY (`id`)")
+    sql_lines.append(") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n")
+
+    sql_lines.append("CREATE TABLE `pets` (")
+    sql_lines.append("  `id` int(11) NOT NULL AUTO_INCREMENT,")
+    sql_lines.append("  `name` varchar(200) NOT NULL,")
+    sql_lines.append("  `animal` int(11) NOT NULL,")
+    sql_lines.append("  `breed` int(255) NOT NULL,")
+    sql_lines.append("  `age` int(11) NOT NULL,")
+    sql_lines.append("  `description` text NOT NULL,")
+    sql_lines.append("  `behavior` varchar(200) NOT NULL,")
+    sql_lines.append("  `photo` varchar(255) NOT NULL,")
+    sql_lines.append("  `status` varchar(50) NOT NULL DEFAULT 'Available',")
+    sql_lines.append("  PRIMARY KEY (`id`)")
+    sql_lines.append(") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n")
     
-    # Ensure reservations table exists
-    sql_lines.append("-- Table structure for table `reservations`")
-    sql_lines.append("CREATE TABLE IF NOT EXISTS `reservations` (")
+    sql_lines.append("CREATE TABLE `reservations` (")
     sql_lines.append("  `id` int(11) NOT NULL AUTO_INCREMENT,")
     sql_lines.append("  `user_id` int(11) NOT NULL,")
     sql_lines.append("  `pet_id` int(11) NOT NULL,")
@@ -394,6 +406,8 @@ def main():
     sql_lines.append("  CONSTRAINT `fk_reservations_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,")
     sql_lines.append("  CONSTRAINT `fk_reservations_pet` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE")
     sql_lines.append(") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n")
+
+    sql_lines.append("SET FOREIGN_KEY_CHECKS = 1;\n")
 
     # Insert Breeds
     sql_lines.append("-- Dumping data for table `breeds`")
@@ -423,7 +437,7 @@ def main():
         breeds_insert_str = "INSERT INTO `breeds` (`id`, `breed_name`, `animal_type_id`) VALUES\n" + ",\n".join(breed_values) + ";"
         main_sql = re.sub(r'INSERT INTO `breeds`[\s\S]*?;\n', breeds_insert_str + "\n", main_sql, count=1)
         
-        pets_insert_str = "INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`) VALUES\n" + ",\n".join(pet_values) + ";"
+        pets_insert_str = "INSERT INTO `pets` (`id`, `name`, `animal`, `breed`, `age`, `description`, `behavior`, `photo`, `status`) VALUES\n" + ",\n".join(pet_values) + ";"
         main_sql = re.sub(r'INSERT INTO `pets`[\s\S]*?;\n', pets_insert_str + "\n", main_sql, count=1)
         
         with open(SQL_MAIN_FILE, "w", encoding="utf-8") as f:
