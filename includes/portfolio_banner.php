@@ -7,15 +7,23 @@ if (session_status() == PHP_SESSION_NONE) {
 $referer = $_SERVER['HTTP_REFERER'] ?? '';
 $host = $_SERVER['HTTP_HOST'] ?? '';
 $host_name = !empty($host) ? explode(':', $host)[0] : '';
+$raw_uri = $_SERVER['REQUEST_URI'] ?? '';
+$raw_query = $_SERVER['QUERY_STRING'] ?? '';
 
-$is_from_param = (isset($_GET['from']) && $_GET['from'] === 'portfolio') || (isset($_GET['ref']) && $_GET['ref'] === 'portfolio');
+$is_from_param = (isset($_GET['from']) && strtolower($_GET['from']) === 'portfolio') ||
+                 (isset($_GET['ref']) && strtolower($_GET['ref']) === 'portfolio') ||
+                 (strpos(strtolower($raw_query), 'from=portfolio') !== false) ||
+                 (strpos(strtolower($raw_query), 'ref=portfolio') !== false) ||
+                 (strpos(strtolower($raw_uri), 'from=portfolio') !== false) ||
+                 (strpos(strtolower($raw_uri), 'ref=portfolio') !== false);
 
 $referer_host = !empty($referer) ? parse_url($referer, PHP_URL_HOST) : null;
 $is_internal_referer = !empty($referer_host) && !empty($host_name) && ($referer_host === $host_name);
 
 $is_external_portfolio_referer = !empty($referer) && !$is_internal_referer && (
-    strpos($referer, 'havenhamelin.work') !== false ||
-    strpos($referer, 'portfolio') !== false
+    strpos(strtolower($referer), 'havenhamelin.work') !== false ||
+    strpos(strtolower($referer), 'wasworld.xyz') !== false ||
+    strpos(strtolower($referer), 'portfolio') !== false
 );
 
 if ($is_external_portfolio_referer) {
@@ -23,8 +31,8 @@ if ($is_external_portfolio_referer) {
     $_SESSION['from_portfolio'] = true;
     unset($_SESSION['from_portfolio_dismissed']);
     $_SESSION['portfolio_url'] = htmlspecialchars($referer);
-} elseif ($is_from_param && !$is_internal_referer) {
-    // Fresh arrival with ?from=portfolio parameter from outside
+} elseif ($is_from_param) {
+    // Fresh arrival with ?from=portfolio parameter
     $_SESSION['from_portfolio'] = true;
     unset($_SESSION['from_portfolio_dismissed']);
 } elseif ($is_internal_referer) {

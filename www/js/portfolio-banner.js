@@ -2,26 +2,37 @@
   'use strict';
 
   const urlParams = new URLSearchParams(window.location.search);
-  const fromParam =
-    urlParams.get('from') === 'portfolio' || urlParams.get('ref') === 'portfolio';
-  const referrer = document.referrer || '';
+  const search = (window.location.search || '').toLowerCase();
+  const href = (window.location.href || '').toLowerCase();
 
-  const isInternalReferrer = referrer && referrer.includes(window.location.host);
+  const fromParam =
+    urlParams.get('from') === 'portfolio' ||
+    urlParams.get('ref') === 'portfolio' ||
+    search.includes('from=portfolio') ||
+    search.includes('ref=portfolio') ||
+    href.includes('from=portfolio') ||
+    href.includes('ref=portfolio');
+
+  const referrer = (document.referrer || '').toLowerCase();
+  const host = (window.location.host || '').toLowerCase();
+
+  const isInternalReferrer = referrer && referrer.includes(host);
 
   const fromReferrer =
     !isInternalReferrer &&
     (referrer.includes('havenhamelin.work') ||
+      referrer.includes('wasworld.xyz') ||
       referrer.includes('portfolio') ||
       (referrer.includes('localhost') && !isInternalReferrer) ||
       (referrer.includes('127.0.0.1') && !isInternalReferrer));
 
-  if (fromReferrer || (fromParam && !isInternalReferrer)) {
+  if (fromReferrer || fromParam) {
     sessionStorage.setItem('from_portfolio', 'true');
     sessionStorage.removeItem('from_portfolio_dismissed');
     if (fromReferrer) {
-      sessionStorage.setItem('portfolio_url', referrer);
+      sessionStorage.setItem('portfolio_url', document.referrer);
     }
-  } else if (!isInternalReferrer && !fromParam) {
+  } else if (!isInternalReferrer) {
     sessionStorage.removeItem('from_portfolio');
     sessionStorage.removeItem('from_portfolio_dismissed');
   }
