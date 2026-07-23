@@ -13,12 +13,14 @@ $username = $_SESSION['login'] ?? '';
 // Fallback lookup if user_id wasn't saved in older session
 if ($user_id <= 0 && !empty($username) && isset($conn) && !$conn->connect_error) {
     $stmt_u = $conn->prepare("SELECT id FROM users WHERE username = ?");
-    $stmt_u->bind_param("s", $username);
-    $stmt_u->execute();
-    $u_res = $stmt_u->get_result();
-    if ($u_row = $u_res->fetch_assoc()) {
-        $user_id = (int)$u_row['id'];
-        $_SESSION['user_id'] = $user_id;
+    if ($stmt_u) {
+        $stmt_u->bind_param("s", $username);
+        $stmt_u->execute();
+        $u_res = $stmt_u->get_result();
+        if ($u_row = $u_res->fetch_assoc()) {
+            $user_id = (int)$u_row['id'];
+            $_SESSION['user_id'] = $user_id;
+        }
     }
 }
 
@@ -45,6 +47,10 @@ if (isset($conn) && !$conn->connect_error) {
         $stmt_res = $conn->prepare("INSERT INTO reservations (user_id, pet_id, status, created_at) VALUES (?, ?, 'Pending', NOW())");
         $stmt_update = $conn->prepare("UPDATE pets SET status = 'Reserved' WHERE id = ? AND status = 'Available'");
         $stmt_info = $conn->prepare("SELECT name, photo FROM pets WHERE id = ?");
+
+        if (!$stmt_res || !$stmt_update || !$stmt_info) {
+            throw new Exception("Unable to prepare database statements for reservation.");
+        }
 
         foreach ($pet_ids as $pid) {
             $pid = intval($pid);

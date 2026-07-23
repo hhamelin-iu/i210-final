@@ -33,5 +33,17 @@ if ($conn->connect_error) {
     $db_connection_error = $conn->connect_error;
 } else {
     $conn->set_charset("utf8mb4");
+    // Auto-create reservations table if missing from database schema
+    @$conn->query("CREATE TABLE IF NOT EXISTS `reservations` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `user_id` int(11) NOT NULL,
+      `pet_id` int(11) NOT NULL,
+      `status` varchar(50) NOT NULL DEFAULT 'Pending',
+      `notes` text DEFAULT NULL,
+      `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      KEY `user_id` (`user_id`),
+      KEY `pet_id` (`pet_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 }
 ?>
