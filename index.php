@@ -26,9 +26,9 @@ render_alert();
             <a href="browse.php" class="btn btn-primary" style="padding: 14px 34px; font-size: 1.1rem;">
                 Browse Pet Roster &rarr;
             </a>
-            <?php if (!isset($_SESSION['login_status']) || $_SESSION['login_status'] == 0): ?>
-                <a href="register.php" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.1rem;">
-                    Create Free Account
+            <?php if (($_SESSION['login_status'] ?? 0) != 1): ?>
+                <a href="loginform.php" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.1rem;">
+                    Sign In / Register
                 </a>
             <?php endif; ?>
         </div>

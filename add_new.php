@@ -7,8 +7,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$login_status = $_SESSION['login_status'] ?? 0;
 $role = $_SESSION['role'] ?? 0;
-if ($role != 1) {
+if ($login_status != 1 || $role != 1) {
     set_alert("Admin privileges required to add pet entries.", "error");
     header("Location: browse.php");
     exit();

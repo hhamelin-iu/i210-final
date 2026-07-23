@@ -58,12 +58,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <li class="nav-item">
                     <a href="browse.php" class="<?= ($current_page == 'browse.php' || $current_page == 'animal_details.php') ? 'active' : '' ?>">Browse Pets</a>
                 </li>
-                <?php if ($login_status != 0): ?>
+                <?php if ($login_status == 1 && !empty($_SESSION['user_id'])): ?>
                     <li class="nav-item">
                         <a href="my_reservations.php" class="<?= ($current_page == 'my_reservations.php') ? 'active' : '' ?>">My Applications</a>
                     </li>
                 <?php endif; ?>
-                <?php if ($role == 1): ?>
+                <?php if ($login_status == 1 && $role == 1): ?>
                     <li class="nav-item">
                         <a href="manage_reservations.php" class="<?= ($current_page == 'manage_reservations.php') ? 'active' : '' ?>">Manage Applications</a>
                     </li>
@@ -86,7 +86,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </a>
 
                 <!-- User Auth Status -->
-                <?php if ($login_status != 0): ?>
+                <?php if ($login_status == 1 && !empty($_SESSION['user_id'])): ?>
                     <div class="user-profile-container <?= ($role == 1) ? 'is-admin' : '' ?>">
                         <?php if ($role == 1): ?>
                             <span class="badge-admin-overlay">ADMIN MODE</span>

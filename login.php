@@ -20,29 +20,32 @@ if (isset($conn) && !$conn->connect_error) {
     // Prepared Query
     $sql = "SELECT * FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($stmt) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        
-        // Verify password
-        if ($password === $row['password']) {
-            $_SESSION['user_id'] = (int)$row['id'];
-            $_SESSION['login'] = $username;
-            $_SESSION['role'] = (int)$row['role'];
-            $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];
-            $_SESSION['login_status'] = 1;
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            
+            // Verify password
+            if ($password === $row['password']) {
+                $_SESSION['user_id'] = (int)$row['id'];
+                $_SESSION['login'] = $username;
+                $_SESSION['role'] = (int)$row['role'];
+                $_SESSION['name'] = $row['firstname'] . " " . $row['lastname'];
+                $_SESSION['login_status'] = 1;
 
-            set_alert("Welcome back, " . $_SESSION['name'] . "!", "success");
-            header("Location: index.php");
-            exit();
+                set_alert("Welcome back, " . $_SESSION['name'] . "!", "success");
+                header("Location: index.php");
+                exit();
+            }
         }
     }
 }
 
-$_SESSION['login_status'] = 2;
+$_SESSION['login_status'] = 0;
+unset($_SESSION['user_id'], $_SESSION['login'], $_SESSION['role'], $_SESSION['name']);
 set_alert("Invalid username or password. Please try again.", "error");
 header("Location: loginform.php");
 exit();

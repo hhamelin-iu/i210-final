@@ -25,7 +25,7 @@ if ($user_id <= 0 && !empty($username) && isset($conn) && !$conn->connect_error)
     }
 }
 
-if (($login_status == 0 && empty($username)) || $user_id <= 0) {
+if ($login_status != 1 || $user_id <= 0) {
     set_alert("Please sign in to view your pet reservations.", "warning");
     header("Location: loginform.php");
     exit();

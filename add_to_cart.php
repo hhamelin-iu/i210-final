@@ -7,7 +7,7 @@ include_once ('includes/connect.php');
 
 $login_status = $_SESSION['login_status'] ?? 0;
 
-if ($login_status == 0) {
+if ($login_status != 1 || empty($_SESSION['user_id'])) {
     set_alert("Please sign in to reserve a pet.", "warning");
     header("Location: loginform.php");
     exit();

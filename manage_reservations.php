@@ -7,9 +7,10 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$login_status = $_SESSION['login_status'] ?? 0;
 $role = $_SESSION['role'] ?? 0;
 
-if ($role != 1) {
+if ($login_status != 1 || $role != 1) {
     set_alert("Access denied. Admin privileges required.", "error");
     header("Location: index.php");
     exit();
