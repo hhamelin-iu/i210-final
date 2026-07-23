@@ -5,7 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Detect referral from portfolio
 $referer = $_SERVER['HTTP_REFERER'] ?? '';
-$host = $_SERVER['HTTP_HOST'] ?? '';
+$forwarded_host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? '';
+$host = !empty($forwarded_host) ? $forwarded_host : ($_SERVER['HTTP_HOST'] ?? '');
 $host_name = !empty($host) ? explode(':', $host)[0] : '';
 $raw_uri = $_SERVER['REQUEST_URI'] ?? '';
 $raw_query = $_SERVER['QUERY_STRING'] ?? '';
@@ -18,11 +19,23 @@ $is_from_param = (isset($_GET['from']) && strtolower($_GET['from']) === 'portfol
                  (strpos(strtolower($raw_uri), 'ref=portfolio') !== false);
 
 $referer_host = !empty($referer) ? parse_url($referer, PHP_URL_HOST) : null;
-$is_internal_referer = !empty($referer_host) && !empty($host_name) && ($referer_host === $host_name);
+
+// Determine internal referrer state with reverse proxy host awareness
+$is_internal_referer = false;
+if (!empty($referer_host) && !empty($host_name)) {
+    if ($referer_host === $host_name) {
+        $is_internal_referer = true;
+    } elseif (
+        (strpos($referer_host, 'projects.havenhamelin.work') !== false || strpos($referer_host, 'wasworld.xyz') !== false) &&
+        (strpos($host_name, 'projects.havenhamelin.work') !== false || strpos($host_name, 'wasworld.xyz') !== false)
+    ) {
+        // Internal proxy navigation between projects.havenhamelin.work and work.wasworld.xyz
+        $is_internal_referer = true;
+    }
+}
 
 $is_external_portfolio_referer = !empty($referer) && !$is_internal_referer && (
     strpos(strtolower($referer), 'havenhamelin.work') !== false ||
-    strpos(strtolower($referer), 'wasworld.xyz') !== false ||
     strpos(strtolower($referer), 'portfolio') !== false
 );
 

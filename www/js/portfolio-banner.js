@@ -16,12 +16,15 @@
   const referrer = (document.referrer || '').toLowerCase();
   const host = (window.location.host || '').toLowerCase();
 
-  const isInternalReferrer = referrer && referrer.includes(host);
+  const isInternalReferrer =
+    referrer &&
+    (referrer.includes(host) ||
+      (referrer.includes('projects.havenhamelin.work') && host.includes('wasworld.xyz')) ||
+      (referrer.includes('wasworld.xyz') && host.includes('projects.havenhamelin.work')));
 
   const fromReferrer =
     !isInternalReferrer &&
     (referrer.includes('havenhamelin.work') ||
-      referrer.includes('wasworld.xyz') ||
       referrer.includes('portfolio') ||
       (referrer.includes('localhost') && !isInternalReferrer) ||
       (referrer.includes('127.0.0.1') && !isInternalReferrer));
