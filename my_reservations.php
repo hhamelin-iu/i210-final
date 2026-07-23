@@ -195,7 +195,6 @@ render_alert();
                         <img src="<?= htmlspecialchars($row['photo']) ?>" alt="<?= htmlspecialchars($row['pet_name']) ?>" class="res-thumb">
                         <div>
                             <div style="display: flex; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
-                                <span class="badge badge-accent"><?= htmlspecialchars($row['type_name'] ?? 'Pet') ?></span>
                                 <span class="badge badge-gold"><?= htmlspecialchars($row['breed_name'] ?? 'Unknown') ?></span>
                             </div>
                             <h2 style="margin: 0; font-size: 1.3rem; color: var(--text-main); font-family: var(--font-heading);"><?= htmlspecialchars($row['pet_name']) ?></h2>

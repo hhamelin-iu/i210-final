@@ -91,7 +91,6 @@ render_alert();
                         <img src="<?= htmlspecialchars($row['photo']) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
                         <div class="animal-card-body">
                             <div style="display: flex; gap: 6px; margin-bottom: 8px; justify-content: center; flex-wrap: wrap;">
-                                <span class="badge badge-accent"><?= htmlspecialchars($row['type_name'] ?? 'Pet') ?></span>
                                 <span class="badge badge-gold"><?= htmlspecialchars($row['breed_name'] ?? 'Unknown') ?></span>
                             </div>
                             <h2><?= htmlspecialchars($row['name']) ?></h2>

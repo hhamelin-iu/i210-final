@@ -7,11 +7,15 @@ $page_title = "My Pet Reservations";
 require_once('includes/header.php');
 ?>
     <style>
+        .cart-card-container {
+            padding: 26px;
+        }
+
         .cart-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 14px;
-            margin: 20px 0;
+            margin: 10px 0 20px 0;
         }
 
         .cart-row {
@@ -36,16 +40,37 @@ require_once('includes/header.php');
             border-bottom-right-radius: 16px;
         }
 
+        .cart-item-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
         .cart-thumb {
-            width: 75px;
-            height: 75px;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 12px rgba(176, 38, 255, 0.25);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .cart-row:hover .cart-thumb {
+            transform: scale(1.04);
+            border-color: var(--neon-cyan);
+        }
+
+        .cart-mobile-details {
+            display: none;
         }
 
         @media (max-width: 640px) {
-            .cart-table, .cart-table thead, .cart-table tbody, .cart-table tr, .cart-table td {
+            .cart-card-container {
+                padding: 14px;
+            }
+
+            .cart-table, .cart-table thead, .cart-table tbody, .cart-table tr {
                 display: block;
                 width: 100%;
             }
@@ -57,18 +82,71 @@ require_once('includes/header.php');
             .cart-row {
                 margin-bottom: 16px;
                 border-radius: 16px !important;
-                padding: 16px;
+                padding: 14px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
             }
 
             .cart-row td {
-                padding: 8px 0 !important;
-                text-align: left !important;
+                padding: 0 !important;
                 border-radius: 0 !important;
+            }
+
+            .cart-cell-age, .cart-cell-badges {
+                display: none !important;
+            }
+
+            .cart-cell-item {
+                width: 100%;
+            }
+
+            .cart-item-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                width: 100%;
+            }
+
+            .cart-thumb {
+                width: 110px;
+                height: 110px;
+                min-width: 110px;
+                border-radius: 14px;
+            }
+
+            .cart-mobile-details {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                flex: 1;
+            }
+
+            .cart-mobile-badges {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+                margin-top: 4px;
+            }
+
+            .cart-cell-action {
+                width: 100%;
+                padding-top: 10px !important;
+                border-top: 1px dashed var(--border-color);
+                text-align: left !important;
+            }
+
+            .cart-cell-action .btn {
+                width: 100%;
+                display: block;
+                text-align: center;
+                padding: 10px 16px !important;
+                font-size: 0.9rem !important;
             }
 
             .cart-actions {
                 flex-direction: column;
-                gap: 14px;
+                gap: 12px;
                 align-items: stretch !important;
             }
 
@@ -114,35 +192,40 @@ render_alert();
 
         if ($result && $result->num_rows > 0) {
             ?>
-            <div class="glass-card" style="padding: 26px;">
+            <div class="glass-card cart-card-container">
                 <table class="cart-table">
                     <thead>
                         <tr style="color: var(--neon-cyan); font-family: var(--font-heading); text-align: left; font-size: 1rem;">
                             <th style="padding: 0 20px 10px 20px;">Companion Pet</th>
                             <th>Age</th>
-                            <th>Classification</th>
+                            <th>Breed</th>
                             <th style="text-align: right; padding-right: 20px;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <tr class="cart-row">
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 18px;">
+                                <td class="cart-cell-item">
+                                    <div class="cart-item-wrapper">
                                         <img src="<?= htmlspecialchars($row['photo']) ?>" alt="<?= htmlspecialchars($row['name']) ?>" class="cart-thumb">
-                                        <strong style="font-size: 1.2rem; color: var(--text-main); font-family: var(--font-heading);"><?= htmlspecialchars($row['name']) ?></strong>
+                                        <div>
+                                            <strong style="font-size: 1.25rem; color: var(--text-main); font-family: var(--font-heading); display: block;"><?= htmlspecialchars($row['name']) ?></strong>
+                                            <div class="cart-mobile-details">
+                                                <span style="color: var(--text-muted); font-size: 0.85rem;"><?= htmlspecialchars($row['age']) ?> years old</span>
+                                                <div class="cart-mobile-badges">
+                                                    <span class="badge badge-gold"><?= htmlspecialchars($row['breed_name'] ?? 'Breed') ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="cart-cell-age">
                                     <span style="color: var(--text-muted); font-size: 0.95rem;"><?= htmlspecialchars($row['age']) ?> years old</span>
                                 </td>
-                                <td>
-                                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                        <span class="badge badge-accent"><?= htmlspecialchars($row['type_name'] ?? 'Pet') ?></span>
-                                        <span class="badge badge-gold"><?= htmlspecialchars($row['breed_name'] ?? 'Breed') ?></span>
-                                    </div>
+                                <td class="cart-cell-badges">
+                                    <span class="badge badge-gold"><?= htmlspecialchars($row['breed_name'] ?? 'Breed') ?></span>
                                 </td>
-                                <td style="text-align: right;">
+                                <td class="cart-cell-action" style="text-align: right;">
                                     <a href="remove_from_cart.php?id=<?= $row['id'] ?>" class="btn btn-danger" style="padding: 6px 16px; font-size: 0.85rem;" onclick="return confirm('Remove <?= htmlspecialchars($row['name']) ?> from your cart?')">
                                         Remove Pet
                                     </a>

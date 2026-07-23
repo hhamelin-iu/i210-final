@@ -115,7 +115,6 @@ render_alert();
             <div class="glass-card details-info">
                 <div>
                     <div class="attribute-list">
-                        <span class="badge badge-accent"><?= htmlspecialchars($pet['type_name'] ?? 'Pet'); ?></span>
                         <span class="badge badge-gold"><?= htmlspecialchars($pet['breed_name'] ?? 'Breed'); ?></span>
                         <span class="badge badge-green"><?= htmlspecialchars($pet['age']); ?> years old</span>
                         <span class="badge <?= $status_class ?>"><?= htmlspecialchars($status); ?></span>
@@ -167,7 +166,6 @@ render_alert();
                             <img src="<?= htmlspecialchars($sim['photo']) ?>" alt="<?= htmlspecialchars($sim['name']) ?>">
                             <div class="similar-card-body">
                                 <div style="display: flex; gap: 4px; margin-bottom: 4px;">
-                                    <span class="badge badge-accent" style="font-size: 0.7rem; padding: 2px 6px;"><?= htmlspecialchars($sim['type_name'] ?? 'Pet') ?></span>
                                     <span class="badge badge-gold" style="font-size: 0.7rem; padding: 2px 6px;"><?= htmlspecialchars($sim['breed_name'] ?? 'Breed') ?></span>
                                 </div>
                                 <strong style="color: var(--text-main); font-size: 1.05rem; font-family: var(--font-heading);"><?= htmlspecialchars($sim['name']) ?></strong>
