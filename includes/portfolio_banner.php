@@ -77,12 +77,12 @@ $show_banner = !empty($_SESSION['from_portfolio']) && empty($_SESSION['from_port
     box-shadow: 0 4px 16px rgba(15, 23, 42, 0.4) !important;
     color: #f8fafc !important;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-    padding: 10px 20px !important;
+    padding: 10px 16px !important;
     position: relative !important;
     width: 100% !important;
     box-sizing: border-box !important;
     z-index: 999999 !important;
-    max-height: 200px !important;
+    max-height: 500px !important;
     overflow: hidden !important;
     transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, opacity 0.3s ease !important;
 }
@@ -104,52 +104,61 @@ $show_banner = !empty($_SESSION['from_portfolio']) && empty($_SESSION['from_port
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 16px !important;
+    gap: 12px 16px !important;
     flex-wrap: wrap !important;
+    position: relative !important;
+    padding-right: 32px !important;
 }
 
 #portfolioReturnBanner .portfolio-banner-content {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
-    font-size: 0.9rem !important;
+    gap: 8px 12px !important;
+    font-size: 0.88rem !important;
     color: #e2e8f0 !important;
+    flex-wrap: wrap !important;
+    flex: 1 1 auto !important;
 }
 
 #portfolioReturnBanner .portfolio-banner-badge {
     background: #0284c7 !important;
     color: #ffffff !important;
     font-weight: 700 !important;
-    font-size: 0.72rem !important;
+    font-size: 0.7rem !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.06em !important;
-    padding: 3px 10px !important;
+    letter-spacing: 0.05em !important;
+    padding: 2px 8px !important;
     border-radius: 20px !important;
     display: inline-block !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 #portfolioReturnBanner .portfolio-banner-text {
     color: #e2e8f0 !important;
+    line-height: 1.4 !important;
 }
 
 #portfolioReturnBanner .portfolio-banner-actions {
     display: flex !important;
     align-items: center !important;
-    gap: 14px !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
 }
 
 #portfolioReturnBanner .portfolio-return-btn {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 6px !important;
     background: rgba(56, 189, 248, 0.12) !important;
     color: #38bdf8 !important;
     border: 1px solid #38bdf8 !important;
-    padding: 6px 14px !important;
+    padding: 5px 12px !important;
     border-radius: 6px !important;
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
     font-weight: 600 !important;
     text-decoration: none !important;
+    white-space: nowrap !important;
     transition: all 0.2s ease !important;
 }
 
@@ -161,13 +170,17 @@ $show_banner = !empty($_SESSION['from_portfolio']) && empty($_SESSION['from_port
 }
 
 #portfolioReturnBanner .portfolio-banner-close {
+    position: absolute !important;
+    right: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     background: transparent !important;
     border: none !important;
     color: #94a3b8 !important;
-    font-size: 1.3rem !important;
+    font-size: 1.4rem !important;
     line-height: 1 !important;
     cursor: pointer !important;
-    padding: 0 4px !important;
+    padding: 6px 8px !important;
     transition: color 0.2s ease !important;
 }
 
@@ -176,14 +189,24 @@ $show_banner = !empty($_SESSION['from_portfolio']) && empty($_SESSION['from_port
 }
 
 @media (max-width: 768px) {
+    #portfolioReturnBanner.portfolio-return-banner {
+        padding: 8px 12px !important;
+    }
     #portfolioReturnBanner .portfolio-banner-container {
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 10px !important;
+        gap: 6px !important;
+        padding-right: 28px !important;
+    }
+    #portfolioReturnBanner .portfolio-banner-close {
+        top: 2px !important;
+        transform: none !important;
+    }
+    #portfolioReturnBanner .portfolio-banner-content {
+        font-size: 0.82rem !important;
     }
     #portfolioReturnBanner .portfolio-banner-actions {
         width: 100% !important;
-        justify-content: space-between !important;
     }
 }
 </style>

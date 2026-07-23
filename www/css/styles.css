@@ -435,10 +435,10 @@
     box-shadow: 0 4px 20px rgba(176, 38, 255, 0.25);
     color: #ffffff;
     font-family: 'Space Grotesk', system-ui, sans-serif;
-    padding: 10px 20px;
+    padding: 10px 16px;
     position: relative;
     z-index: 1001;
-    max-height: 200px;
+    max-height: 500px;
     overflow: hidden;
     transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, opacity 0.3s ease;
 }
@@ -460,50 +460,60 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 12px 16px;
     flex-wrap: wrap;
+    position: relative;
+    padding-right: 32px;
 }
 
 .portfolio-banner-content {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 0.92rem;
+    gap: 8px 12px;
+    font-size: 0.88rem;
+    color: #e2e8f0;
+    flex-wrap: wrap;
+    flex: 1 1 auto;
 }
 
 .portfolio-banner-badge {
     background: linear-gradient(135deg, #00f0ff, #b026ff);
     color: #0b071e;
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 3px 10px;
+    padding: 2px 8px;
     border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .portfolio-banner-text {
     color: #e2e8f0;
+    line-height: 1.4;
 }
 
 .portfolio-banner-actions {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    flex-shrink: 0;
 }
 
 .portfolio-return-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(0, 240, 255, 0.12);
     color: #00f0ff;
     border: 1px solid #00f0ff;
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 8px;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
     transition: all 0.2s ease;
 }
 
@@ -515,13 +525,17 @@
 }
 
 .portfolio-banner-close {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     background: transparent;
     border: none;
     color: #a0aec0;
     font-size: 1.4rem;
     line-height: 1;
     cursor: pointer;
-    padding: 0 4px;
+    padding: 6px 8px;
     transition: color 0.2s ease;
 }
 
@@ -530,13 +544,23 @@
 }
 
 @media (max-width: 768px) {
+    .portfolio-return-banner {
+        padding: 8px 12px;
+    }
     .portfolio-banner-container {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 6px;
+        padding-right: 28px;
+    }
+    .portfolio-banner-close {
+        top: 2px;
+        transform: none;
+    }
+    .portfolio-banner-content {
+        font-size: 0.82rem;
     }
     .portfolio-banner-actions {
         width: 100%;
-        justify-content: space-between;
     }
 }
